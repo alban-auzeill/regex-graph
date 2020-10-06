@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "application"
 }
 
 group 'org.example'
@@ -10,6 +11,9 @@ repositories {
 }
 
 dependencies {
+    implementation "commons-io:commons-io:2.8.0"
+    implementation "org.apache.commons:commons-text:1.9"
+    implementation "org.nanohttpd:nanohttpd:2.3.1"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.0"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
     testImplementation "org.assertj:assertj-core:3.11.1"
@@ -17,4 +21,18 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    doFirst { jvmArgs += ['--add-opens', 'java.base/java.util.regex=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED' ] }
+}
+ext {
+    javaMainClass = "com.auzeill.regex.graph.Server"
+}
+
+application {
+    mainClassName = javaMainClass
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': javaMainClass
+    }
 }

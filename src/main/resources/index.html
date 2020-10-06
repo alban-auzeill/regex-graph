@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pattern Graph</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body>
+<p><label for="regular-expression">Java Pattern</label></p>
+<p><input type="text" name="regular-expression" id="regular-expression" style="width:90%;" onkeyup="onFilterChange()" placeholder="Java Regular Expression..."></p>
+<p id="svg-parent"></p>
+</body>
+<script>
+  let lastTimeout = null;
+  function onFilterChange() {
+    if (lastTimeout !== null) {
+      clearTimeout(lastTimeout);
+    }
+    lastTimeout = setTimeout(updateSVG, 500);
+  }
+  function updateSVG() {
+    let regexValue = document.getElementById("regular-expression").value;
+    document.getElementById("svg-parent").innerHTML = "<img src=\"/graph?exp=" + encodeURIComponent(regexValue) + "\" />";
+  }
+</script>
+</html>

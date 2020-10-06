@@ -16,12 +16,6 @@ public class RegExGraph {
 
   private static final String NL = "\n";
 
-  public static void main(String[] args) {
-    for (String arg : args) {
-      System.out.println(transform(arg));
-    }
-  }
-
   public static String transform(String pattern) {
     return transform(Pattern.compile(pattern));
   }
