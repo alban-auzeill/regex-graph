@@ -46,8 +46,15 @@ class ServerTest {
   }
 
   @Test
-  void svg() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet("http://localhost:9000/graph?exp=abc");
+  void svg_pattern() throws IOException, InterruptedException {
+    HttpResponse<String> response = httpGet("http://localhost:9000/pattern?exp=abc");
+    assertThat(response.statusCode()).isEqualTo(200);
+    assertThat(response.body()).contains("<svg").contains("</svg>");
+  }
+
+  @Test
+  void svg_regex_tree() throws IOException, InterruptedException {
+    HttpResponse<String> response = httpGet("http://localhost:9000/regex-tree?exp=abc");
     assertThat(response.statusCode()).isEqualTo(200);
     assertThat(response.body()).contains("<svg").contains("</svg>");
   }

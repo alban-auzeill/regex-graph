@@ -31,13 +31,18 @@ public class Server extends NanoHTTPD {
         case "/favicon.ico":
         case "/favicon.png":
           return resourceResponse("/favicon.png", "image/png");
-        case "/graph":
+        case "/pattern":
+        case "/regex-tree":
           List<String> exp = session.getParameters().get("exp");
           if (exp == null || exp.isEmpty()) {
             return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, NanoHTTPD.MIME_HTML, "Missing exp parameter");
           }
           try {
-            String dot = RegExGraph.transform(exp.get(0));
+            String stringLiteral = exp.get(0);
+            if (!stringLiteral.startsWith("\"") || !stringLiteral.endsWith("\"")) {
+              throw new IllegalArgumentException("Expecting a string literal with double quotes \"...\"");
+            }
+            String dot = session.getUri().equals("/pattern") ? PatternGraph.transform(stringLiteral) : RegexTreeGraph.transform(stringLiteral);
             byte[] svg = Dot.generateSVG(dot);
             return newFixedLengthResponse(Response.Status.OK, "image/svg+xml", new ByteArrayInputStream(svg), svg.length);
           } catch (Exception e) {
