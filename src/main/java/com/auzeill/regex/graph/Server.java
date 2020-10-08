@@ -43,6 +43,10 @@ public class Server extends NanoHTTPD {
               throw new IllegalArgumentException("Expecting a string literal with double quotes \"...\"");
             }
             String dot = session.getUri().equals("/pattern") ? PatternGraph.transform(stringLiteral) : RegexTreeGraph.transform(stringLiteral);
+            if (session.getParameters().containsKey("edit")) {
+              String html = "<pre>\n" + dot.replace("&", "&amp;").replace("<", "&lt;") + "</pre>\n";
+              return newFixedLengthResponse(Response.Status.OK, NanoHTTPD.MIME_HTML, html);
+            }
             byte[] svg = Dot.generateSVG(dot);
             return newFixedLengthResponse(Response.Status.OK, "image/svg+xml", new ByteArrayInputStream(svg), svg.length);
           } catch (Exception e) {

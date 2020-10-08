@@ -39,7 +39,8 @@
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url);
     xhr.onload = function() {
-      htmlElement.innerHTML = (xhr.status === 200 ? xhr.responseText : 'HTTP Error ' + xhr.status);
+      let editLink = '<a href="' + url + '&edit" target="_blank">edit dot</a><br/>';
+      htmlElement.innerHTML = editLink + (xhr.status === 200 ? xhr.responseText : 'HTTP Error ' + xhr.status);
     };
     xhr.send();
   }
