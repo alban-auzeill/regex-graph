@@ -1,8 +1,10 @@
 package com.auzeill.regex.graph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,7 @@ public class GraphContext {
 
   private final Map<Object, String> objectReferences = new IdentityHashMap<>();
   private final Map<Object, String> nodeReferences = new IdentityHashMap<>();
-  private final List<Node> nodes = new ArrayList<>();
+  private final Map<String, Node> nodes = new LinkedHashMap<>();
   private final List<Edge> edges = new ArrayList<>();
   private final Deque<Object> nodeStack = new LinkedList<>();
   private final Deque<String> fieldStack = new LinkedList<>();
@@ -40,15 +42,19 @@ public class GraphContext {
   }
 
   public void add(Node node) {
-    nodes.add(node);
+    nodes.put(node.name, node);
+  }
+
+  public Node getNode(String reference) {
+    return nodes.get(reference);
   }
 
   public void add(Edge edge) {
     edges.add(edge);
   }
 
-  public List<Node> nodes() {
-    return nodes;
+  public Collection<Node> nodes() {
+    return nodes.values();
   }
 
   public List<Edge> edges() {
@@ -80,12 +86,12 @@ public class GraphContext {
   public static class Node {
     public final String name;
     public String label;
-    public final String color;
+    public String type;
 
-    public Node(String name, String label, String color) {
+    public Node(String name, String label, String type) {
       this.name = name;
       this.label = label;
-      this.color = color;
+      this.type = type;
     }
   }
 
@@ -93,13 +99,13 @@ public class GraphContext {
     public final String source;
     public final String target;
     public final String label;
-    public final String color;
+    public final String type;
 
-    public Edge(String source, String target, String label, String color) {
+    public Edge(String source, String target, String label, String type) {
       this.source = source;
       this.target = target;
       this.label = label;
-      this.color = color;
+      this.type = type;
     }
   }
 }

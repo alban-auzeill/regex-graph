@@ -5,8 +5,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GraphWriter {
   public static final char NL = '\n';
@@ -25,40 +27,60 @@ public class GraphWriter {
     return false;
   }
 
-  String nodeColor(Object object) {
-    return null;
+  String nodeType(Object object) {
+    return "default";
   }
 
   String graph(Object object) {
     GraphContext savedContext = context;
     context = new GraphContext();
     write(object);
+    extendsContext(object, context);
     StringBuilder out = new StringBuilder();
     out.append("digraph G {").append(NL);
     writeGraphStyle(out);
-    for (GraphContext.Node node : context.nodes()) {
-      String attributes = node.color != null ? ", color=" + writeCenteredDotLabel(node.color) + ", fontcolor=" + writeCenteredDotLabel(node.color) : "";
-      out.append("  ")
-        .append(node.name)
-        .append("[ label=").append(writeLeftAlignDotLabel(node.label)).append(attributes).append(" ]")
-        .append(NL);
-    }
-    for (GraphContext.Edge edge : context.edges()) {
-      String attributes = edge.color != null ? ", color=" + writeCenteredDotLabel(edge.color) + ", fontcolor=" + writeCenteredDotLabel(edge.color) : "";
-      out.append("  ")
-        .append(edge.source).append(" -> ").append(edge.target)
-        .append(" [ taillabel=").append(writeCenteredDotLabel(edge.label)).append(attributes).append(" ]")
-        .append(NL);
-    }
+
+    context.nodes().stream()
+      .collect(Collectors.groupingBy(node -> node.type, LinkedHashMap::new, Collectors.toList()))
+      .forEach((type, nodes) -> {
+        out.append(NL);
+        out.append(INDENTATION).append("// ").append(type).append(" nodes").append(NL);
+        writeNodesStyle(out, type);
+        nodes.forEach(node -> out.append("  ")
+          .append(node.name)
+          .append("[ label=").append(writeLeftAlignDotLabel(node.label)).append(" ]")
+          .append(NL));
+      });
+    context.edges().stream()
+      .collect(Collectors.groupingBy(edge -> edge.type, LinkedHashMap::new, Collectors.toList()))
+      .forEach((type, edges) -> {
+        out.append(NL);
+        out.append(INDENTATION).append("// ").append(type).append(" edges").append(NL);
+        writeEdgesStyle(out, type);
+        edges.forEach(edge -> out.append("  ")
+          .append(edge.source).append(" -> ").append(edge.target)
+          .append(" [ taillabel=").append(writeCenteredDotLabel(edge.label)).append(" ]")
+          .append(NL));
+      });
     out.append("}").append(NL);
     context = savedContext;
     return out.toString();
   }
 
+  void extendsContext(Object object, GraphContext context) {
+    // can be overridden
+  }
+
   void writeGraphStyle(StringBuilder out) {
     out.append(INDENTATION).append("rankdir=LR;").append(NL);
     out.append(INDENTATION).append("graph [ fontname=\"Monospace\", fontsize=10 ]").append(NL);
+  }
+
+  void writeNodesStyle(StringBuilder out, String nodeType) {
     out.append(INDENTATION).append("node [ fontname=\"Monospace\", fontsize=10, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]").append(NL);
+  }
+
+  void writeEdgesStyle(StringBuilder out, String edgeType) {
     out.append(INDENTATION).append("edge [ fontname=\"Monospace\", fontsize=10, color=\"Navy\" ]").append(NL);
   }
 
@@ -205,7 +227,7 @@ public class GraphWriter {
     GraphContext.Node node = null;
     if (firstObject || isNode(object)) {
       context.setNodeReference(object, reference);
-      node = new GraphContext.Node(reference, "⛏", nodeColor(object));
+      node = new GraphContext.Node(reference, "⛏", nodeType(object));
       context.add(node);
       context.nodeStack().push(object);
       context.pushEmptyFieldName();
@@ -291,7 +313,7 @@ public class GraphWriter {
     String parentNode = context.getNodeReference(parent);
     String valueNode = context.getNodeReference(value);
     if (parentNode != null && valueNode != null) {
-      context.add(new GraphContext.Edge(parentNode, valueNode, edgeLabel(parent, currentField), null));
+      context.add(new GraphContext.Edge(parentNode, valueNode, edgeLabel(parent, currentField), edgeType(parentNode, valueNode)));
       return true;
     }
     return false;
@@ -299,6 +321,10 @@ public class GraphWriter {
 
   String edgeLabel(Object parent, String field) {
     return field;
+  }
+
+  String edgeType(Object source, Object target) {
+    return "default";
   }
 
   boolean isSingleLine(String data) {
