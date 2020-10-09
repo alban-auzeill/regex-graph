@@ -15,10 +15,12 @@ class ServerTest {
 
   public static HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
   public static Server server;
+  public static String server_url;
 
   @BeforeAll
   static void beforeAll() throws IOException {
-    server = new Server();
+    server = new Server(0);
+    server_url = "http://localhost:" + server.getListeningPort();
   }
 
   @AfterAll
@@ -28,40 +30,40 @@ class ServerTest {
 
   @Test
   void index() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet("http://localhost:9000/");
+    HttpResponse<String> response = httpGet(server_url + "/");
     assertThat(response.statusCode()).isEqualTo(200);
     assertThat(response.body()).contains("<html lang=\"en\">").contains("</html>");
   }
 
   @Test
   void favicon_ico() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet("http://localhost:9000/favicon.ico");
+    HttpResponse<String> response = httpGet(server_url + "/favicon.ico");
     assertThat(response.statusCode()).isEqualTo(200);
   }
 
   @Test
   void favicon_png() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet("http://localhost:9000/favicon.png");
+    HttpResponse<String> response = httpGet(server_url + "/favicon.png");
     assertThat(response.statusCode()).isEqualTo(200);
   }
 
   @Test
   void svg_pattern() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet("http://localhost:9000/pattern?exp=abc");
+    HttpResponse<String> response = httpGet(server_url + "/pattern?exp=abc");
     assertThat(response.statusCode()).isEqualTo(200);
     assertThat(response.body()).contains("<svg").contains("</svg>");
   }
 
   @Test
   void svg_regex_tree() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet("http://localhost:9000/regex-tree?exp=abc");
+    HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=abc");
     assertThat(response.statusCode()).isEqualTo(200);
     assertThat(response.body()).contains("<svg").contains("</svg>");
   }
 
   @Test
   void not_found() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet("http://localhost:9000/unknown");
+    HttpResponse<String> response = httpGet(server_url + "/unknown");
     assertThat(response.statusCode()).isEqualTo(404);
   }
 

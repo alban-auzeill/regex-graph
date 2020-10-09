@@ -22,9 +22,14 @@ dependencies {
 }
 
 test {
+    systemProperties = [ 'dot': System.getProperty('dot') ]
     useJUnitPlatform()
     doFirst { jvmArgs += ['--add-opens', 'java.base/java.util.regex=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED' ] }
 }
+run {
+    systemProperties = [ 'dot': System.getProperty('dot'), 'port': System.getProperty('port') ]
+}
+
 ext {
     javaMainClass = "com.auzeill.regex.graph.Server"
 }

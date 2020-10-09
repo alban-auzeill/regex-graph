@@ -10,16 +10,18 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class Server extends NanoHTTPD {
 
-  private static final int SERVER_PORT = 9000;
+  private static final int DEFAULT_SERVER_PORT = Integer.parseInt(System.getProperty("port", "9000"));
 
   public static void main(String[] args) throws IOException {
-    new Server();
+    new Server(DEFAULT_SERVER_PORT);
   }
 
-  public Server() throws IOException {
-    super(SERVER_PORT);
+  public Server(int port) throws IOException {
+    super(port);
+    // check dot presence before starting the server
+    Dot.dotPath();
     start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
-    System.out.println("Running! Open http://localhost:" + SERVER_PORT + "/ in your browser.");
+    System.out.println("Running! Open http://localhost:" + getListeningPort() + "/ in your browser.");
   }
 
   @Override
