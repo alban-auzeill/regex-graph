@@ -69,6 +69,10 @@ public class GraphContext {
     return objectReferences.get(object);
   }
 
+  public String createReference() {
+    return createObjectReference(new Object());
+  }
+
   public String createObjectReference(Object object) {
     String reference = String.valueOf(referenceCount() + 1);
     objectReferences.put(object, reference);

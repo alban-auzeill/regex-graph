@@ -237,7 +237,7 @@ class GraphWriterTest {
     assertThat(writer.graph(null)).isEqualTo("" +
       "digraph G {\n" +
       "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=10 ]\n" +
+      "  graph [ fontname=\"Monospace\", fontsize=9 ]\n" +
       "}\n");
   }
 
@@ -247,10 +247,10 @@ class GraphWriterTest {
     assertThat(writer.graph(new B(a, 0, a))).isEqualTo("" +
       "digraph G {\n" +
       "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=10 ]\n" +
+      "  graph [ fontname=\"Monospace\", fontsize=11 ]\n" +
       "\n" +
       "  // default nodes\n" +
-      "  node [ fontname=\"Monospace\", fontsize=10, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
+      "  node [ fontname=\"Monospace\", fontsize=9, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
       "  1[ label=\"GraphWriterTest$B:1\\{\\l  .a:\\l    GraphWriterTest$A:2\\{\\l      .a: 32\\l      .b: -2\\l    \\}\\l  .b: 0\\l  .c: \\{2\\}\\l\\}\\l\" ]\n" +
       "}\n");
   }
@@ -270,17 +270,17 @@ class GraphWriterTest {
     assertThat(writer.graph(o1)).isEqualTo("" +
       "digraph G {\n" +
       "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=10 ]\n" +
+      "  graph [ fontname=\"Monospace\", fontsize=11 ]\n" +
       "\n" +
       "  // default nodes\n" +
-      "  node [ fontname=\"Monospace\", fontsize=10, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
+      "  node [ fontname=\"Monospace\", fontsize=9, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
       "  1[ label=\"GraphWriterTest$B:1\\{\\l  .b: 0\\l\\}\\l\" ]\n" +
       "  2[ label=\"GraphWriterTest$C:2\\{\\l\\}\\l\" ]\n" +
       "  3[ label=\"GraphWriterTest$C:3\\{\\l\\}\\l\" ]\n" +
       "  4[ label=\"GraphWriterTest$C:4\\{\\l\\}\\l\" ]\n" +
       "\n" +
       "  // default edges\n" +
-      "  edge [ fontname=\"Monospace\", fontsize=10, color=\"Navy\" ]\n" +
+      "  edge [ fontname=\"Monospace\", fontsize=11, color=\"Navy\" ]\n" +
       "  3 -> 2 [ taillabel=\"previous\" ]\n" +
       "  4 -> 2 [ taillabel=\"previous\" ]\n" +
       "  4 -> 4 [ taillabel=\"next\" ]\n" +
@@ -313,16 +313,16 @@ class GraphWriterTest {
     assertThat(writer.graph(o1)).isEqualTo("" +
       "digraph G {\n" +
       "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=10 ]\n" +
+      "  graph [ fontname=\"Monospace\", fontsize=11 ]\n" +
       "\n" +
       "  // default nodes\n" +
-      "  node [ fontname=\"Monospace\", fontsize=10, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
+      "  node [ fontname=\"Monospace\", fontsize=9, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
       "  1[ label=\"GraphWriterTest$C:1\\{\\l\\}\\l\" ]\n" +
       "  3[ label=\"GraphWriterTest$C:3\\{\\l  .previous: null\\l  .next: \\\"next of o3\\\"\\l\\}\\l\" ]\n" +
       "  4[ label=\"GraphWriterTest$C:4\\{\\l  .previous: null\\l  .next: \\\"next of o4\\\"\\l\\}\\l\" ]\n" +
       "\n" +
       "  // default edges\n" +
-      "  edge [ fontname=\"Monospace\", fontsize=10, color=\"Navy\" ]\n" +
+      "  edge [ fontname=\"Monospace\", fontsize=9, color=\"Navy\" ]\n" +
       "  1 -> 3 [ taillabel=\"previous[0]\" ]\n" +
       "  1 -> 4 [ taillabel=\"previous[1]\" ]\n" +
       "  1 -> 3 [ taillabel=\"next\" ]\n" +

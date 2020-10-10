@@ -4,6 +4,7 @@ import com.auzeill.regex.graph.GraphContext.Edge;
 import com.auzeill.regex.graph.GraphContext.Node;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,8 @@ public class RegexTreeGraph extends GraphWriter {
     String style = "rounded,filled";
     String color = "LightGray";
     String fillColor = "Beige";
-    String additionalParams = "";
+    String fixedSize="false";
+    String width="0.75";
     switch (nodeType) {
       case "error":
         color = "Red";
@@ -86,18 +88,21 @@ public class RegexTreeGraph extends GraphWriter {
         shape = "circle";
         color = "DodgerBlue";
         fillColor = "DodgerBlue";
-        additionalParams = " fixedsize=true, width=\"0.20\"";
+        fixedSize="true";
+        width="0.20";
         break;
       case "end":
         shape = "doublecircle";
         color = "DodgerBlue";
         fillColor = "DodgerBlue";
-        additionalParams = " fixedsize=true, width=\"0.12\"";
+        fixedSize="true";
+        width="0.12";
         break;
     }
-    out.append(INDENTATION).append("node [fontname=\"Monospace\", fontsize= \"10\", shape=\"").append(shape)
+    out.append(INDENTATION).append("node [fontname=\"Monospace\", fontsize= \"9\", shape=\"").append(shape)
       .append("\", style=\"").append(style).append("\", color=\"").append(color).append("\", fillcolor=\"")
-      .append(fillColor).append("\"").append(additionalParams).append("]").append(NL);
+      .append(fillColor).append("\", fixedsize=\"").append(fixedSize).append("\", width=\"")
+      .append(width).append("\"]").append(NL);
   }
 
   @Override
@@ -130,22 +135,21 @@ public class RegexTreeGraph extends GraphWriter {
         color = "Red";
         break;
     }
-    out.append(INDENTATION).append("edge [style=\"").append(style).append("\", color=\"").append(color)
-      .append("\", fontcolor=\"").append(color).append("\", arrowhead=\"").append(arrowHead)
-      .append("\", arrowtail=\"").append(arrowTail).append("\", dir=\"both\"]").append(NL);
+    out.append(INDENTATION).append("edge [fontname=\"Monospace\", fontsize=\"9\", style=\"").append(style)
+      .append("\", color=\"").append(color).append("\", fontcolor=\"").append(color)
+      .append("\", arrowhead=\"").append(arrowHead).append("\", arrowtail=\"").append(arrowTail)
+      .append("\", dir=\"both\"]").append(NL);
   }
 
   @Override
   void extendsContext(Object object, GraphContext context) {
-    int errorId = 1;
+    new AutomatonStateMetadataVisitor(context).visit(result);
     for (SyntaxError syntaxError : result.getSyntaxErrors()) {
       context.add(new Node(
-        "err" + errorId,
-        "SyntaxError:\n" + result.getSyntaxErrors().get(0).getMessage(),
+        context.createObjectReference(syntaxError),
+        "SyntaxError:\n" + syntaxError.getMessage(),
         "error"));
-      errorId++;
     }
-    new AutomatonStateMetadataVisitor(context).visit(result);
   }
 
   static class AutomatonStateMetadataVisitor extends RegexBaseVisitor {
@@ -153,6 +157,8 @@ public class RegexTreeGraph extends GraphWriter {
     Map<String, List<String>> successorMap = new HashMap<>();
     Map<String, String> continuationMap = new HashMap<>();
     Map<String, String> continuationHeadType = new HashMap<>();
+    List<CapturingGroupTree> capturingGroups = new ArrayList<>();
+    List<BackReferenceTree> backReferenceTrees = new ArrayList<>();
 
     public AutomatonStateMetadataVisitor(GraphContext context) {
       this.context = context;
@@ -162,20 +168,51 @@ public class RegexTreeGraph extends GraphWriter {
     public void visit(RegexParseResult regexParseResult) {
       if (!context.nodes().isEmpty()) {
         RegexTree firstNode = regexParseResult.getResult();
-        setSuccessor(firstNode, "EndOfRegex");
-        setContinuation(firstNode, "EndOfRegex");
+        String endOfRegexReference = context.createReference();
+        setSuccessor(firstNode, endOfRegexReference);
+        setContinuation(firstNode, endOfRegexReference);
 
         super.visit(regexParseResult);
 
-        context.add(new Node("EndOfRegex", "EndOfRegex\n  continuation: null\n", "state"));
+        linkBackReferenceToCapturingGroup();
+
+        context.add(new Node(endOfRegexReference, "EndOfRegex:" + endOfRegexReference + "\n  continuation: null\n", "state"));
 
         successorMap.forEach(this::createSuccessorEdges);
         continuationMap.forEach(this::createContinuationEdge);
 
         context.add(new Node("end", "", "end"));
-        context.add(new Edge("EndOfRegex", "end", "", "successor"));
+        context.add(new Edge(endOfRegexReference, "end", "", "successor"));
         context.add(new Node("start", "", "start"));
         context.add(new Edge("start", context.getNodeReference(firstNode), "", "successor"));
+      }
+    }
+
+    private void linkBackReferenceToCapturingGroup() {
+      for (BackReferenceTree backReferenceTree : backReferenceTrees) {
+        CapturingGroupTree capturingGroup = findMatchingGroup(backReferenceTree);
+        if (capturingGroup != null) {
+          String sourceReference = context.getNodeReference(backReferenceTree);
+          String targetReference = context.getNodeReference(capturingGroup);
+          context.add(new Edge(sourceReference, targetReference, "group", "back-reference"));
+        }
+      }
+    }
+
+    private CapturingGroupTree findMatchingGroup(BackReferenceTree backReferenceTree) {
+      for (CapturingGroupTree capturingGroup : capturingGroups) {
+        if (matches(backReferenceTree, capturingGroup)) {
+          return capturingGroup;
+        }
+      }
+      return null;
+    }
+
+    private boolean matches(BackReferenceTree backReferenceTree, CapturingGroupTree capturingGroup) {
+      if (backReferenceTree.isNumerical()) {
+        return capturingGroup.getGroupNumber() == backReferenceTree.groupNumber();
+      } else {
+        return capturingGroup.getName().filter(name -> name.equals(backReferenceTree.groupName())).isPresent();
       }
     }
 
@@ -274,6 +311,7 @@ public class RegexTreeGraph extends GraphWriter {
     @Override
     public void visitCapturingGroup(CapturingGroupTree tree) {
       markVisited(tree);
+      capturingGroups.add(tree);
       if (tree.getElement() != null) {
         insertSuccessor(tree, tree.getElement());
         copyContinuation(tree, tree.getElement());
@@ -307,12 +345,12 @@ public class RegexTreeGraph extends GraphWriter {
       if (tree.getElement() != null) {
         String treeReference = context.getNodeReference(tree);
         String elementReference = context.getNodeReference(tree.getElement());
-        String endNode = "EndOfLookAround" + treeReference;
-        context.add(new Node(endNode, endNode + "\n  continuation: null\n", "state"));
-        context.add(new Edge(endNode, treeReference, "back", "back-reference"));
+        String endNodeReference = context.createReference();
+        context.add(new Node(endNodeReference, "EndOfLookAround:" + endNodeReference + "\n  continuation: null\n", "state"));
+        context.add(new Edge(endNodeReference, treeReference, "back", "back-reference"));
         if (tree.getPolarity() == LookAroundTree.Polarity.NEGATIVE) {
-          String negationNode = "Negation" + treeReference;
-          context.add(new Node(negationNode, negationNode, "state"));
+          String negationNode = context.createReference();
+          context.add(new Node(negationNode, "Negation:" + negationNode, "state"));
           continuationHeadType.put(negationNode, "negation-successor");
           successorMap.put(treeReference, Collections.singletonList(negationNode));
           successorMap.put(negationNode, Collections.singletonList(elementReference));
@@ -320,8 +358,8 @@ public class RegexTreeGraph extends GraphWriter {
         } else {
           successorMap.put(treeReference, Collections.singletonList(elementReference));
         }
-        successorMap.put(elementReference, Collections.singletonList(endNode));
-        continuationMap.put(elementReference, endNode);
+        successorMap.put(elementReference, Collections.singletonList(endNodeReference));
+        continuationMap.put(elementReference, endNodeReference);
       }
       super.visitLookAround(tree);
     }
@@ -332,26 +370,42 @@ public class RegexTreeGraph extends GraphWriter {
       if (tree.getElement() != null) {
         String treeReference = context.getNodeReference(tree);
         String elementReference = context.getNodeReference(tree.getElement());
-        String endNode = "EndOfRepetition" + treeReference;
-        context.add(new Node(endNode, endNode, "state"));
-        List<String> endNodeSuccessors = new ArrayList<>(getSuccessors(tree));
+        String endNodeReference = context.createReference();
+        context.add(new Node(endNodeReference, "Branch:" + endNodeReference, "state"));
+        List<String> endNodeSuccessors = new ArrayList<>();
+        if (tree.getQuantifier().getMinimumRepetitions() > 0) {
+          endNodeSuccessors.addAll(getSuccessors(tree));
+        }
         Quantifier.Modifier modifier = tree.getQuantifier().getModifier();
         if (modifier == Quantifier.Modifier.RELUCTANT) {
           endNodeSuccessors.add(treeReference);
         } else if (modifier == Quantifier.Modifier.POSSESSIVE) {
-          continuationHeadType.put(endNode, "possessive-successor");
+          continuationHeadType.put(endNodeReference, "possessive-successor");
           endNodeSuccessors.add(0, treeReference);
-        } else {
-          // GREEDY
+        } else { // GREEDY
           endNodeSuccessors.add(0, treeReference);
         }
-        successorMap.put(treeReference, Collections.singletonList(elementReference));
-        successorMap.put(elementReference, Collections.singletonList(endNode));
-        successorMap.put(endNode, endNodeSuccessors);
-        continuationMap.put(elementReference, endNode);
-        continuationMap.put(endNode, getContinuation(tree));
+        if (tree.getQuantifier().getMinimumRepetitions() == 0) {
+          if (modifier == Quantifier.Modifier.RELUCTANT) {
+            successorMap.put(treeReference, Arrays.asList(getContinuation(tree), elementReference));
+          } else {
+            successorMap.put(treeReference, Arrays.asList(elementReference, getContinuation(tree)));
+          }
+        } else {
+          successorMap.put(treeReference, Collections.singletonList(elementReference));
+        }
+        successorMap.put(elementReference, Collections.singletonList(endNodeReference));
+        successorMap.put(endNodeReference, endNodeSuccessors);
+        continuationMap.put(elementReference, endNodeReference);
+        continuationMap.put(endNodeReference, getContinuation(tree));
       }
       super.visitRepetition(tree);
+    }
+
+    @Override
+    public void visitBackReference(BackReferenceTree tree) {
+      markVisited(tree);
+      backReferenceTrees.add(tree);
     }
 
     @Override
@@ -366,11 +420,6 @@ public class RegexTreeGraph extends GraphWriter {
 
     @Override
     public void visitUnicodeCodePoint(UnicodeCodePointTree tree) {
-      markVisited(tree);
-    }
-
-    @Override
-    public void visitBackReference(BackReferenceTree tree) {
       markVisited(tree);
     }
 

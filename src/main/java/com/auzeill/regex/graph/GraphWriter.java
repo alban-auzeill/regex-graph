@@ -73,15 +73,15 @@ public class GraphWriter {
 
   void writeGraphStyle(StringBuilder out) {
     out.append(INDENTATION).append("rankdir=LR;").append(NL);
-    out.append(INDENTATION).append("graph [ fontname=\"Monospace\", fontsize=10 ]").append(NL);
+    out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\"]").append(NL);
   }
 
   void writeNodesStyle(StringBuilder out, String nodeType) {
-    out.append(INDENTATION).append("node [ fontname=\"Monospace\", fontsize=10, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]").append(NL);
+    out.append(INDENTATION).append("node [fontname=\"Monospace\", fontsize=\"9\", shape=\"box\", style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\"]").append(NL);
   }
 
   void writeEdgesStyle(StringBuilder out, String edgeType) {
-    out.append(INDENTATION).append("edge [ fontname=\"Monospace\", fontsize=10, color=\"Navy\" ]").append(NL);
+    out.append(INDENTATION).append("edge [fontname=\"Monospace\", fontsize=\"9\", color=\"Navy\"]").append(NL);
   }
 
   static class DirectValue {
