@@ -32,7 +32,10 @@ class ServerTest {
   void index() throws IOException, InterruptedException {
     HttpResponse<String> response = httpGet(server_url + "/");
     assertThat(response.statusCode()).isEqualTo(200);
-    assertThat(response.body()).contains("<html lang=\"en\">").contains("</html>");
+    assertThat(response.body())
+      .contains("<html lang=\"en\">")
+      .contains("<title>Pattern Graph</title>")
+      .contains("</html>");
   }
 
   @Test
@@ -49,16 +52,51 @@ class ServerTest {
 
   @Test
   void svg_pattern() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet(server_url + "/pattern?exp=abc");
+    HttpResponse<String> response = httpGet(server_url + "/pattern?exp=%22[a]%22");
     assertThat(response.statusCode()).isEqualTo(200);
-    assertThat(response.body()).contains("<svg").contains("</svg>");
+    assertThat(response.body())
+      .contains("<svg").contains("</svg>")
+      .contains("Pattern:1{");
   }
 
   @Test
-  void svg_regex_tree() throws IOException, InterruptedException {
-    HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=abc");
+  void svg_regex_tree_trees_and_states() throws IOException, InterruptedException {
+    HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=%22[a]%22&trees&states");
     assertThat(response.statusCode()).isEqualTo(200);
-    assertThat(response.body()).contains("<svg").contains("</svg>");
+    assertThat(response.body())
+      .contains("<svg").contains("</svg>")
+      .contains("CharacterClassTree:1{")
+      .contains("EndOfRegex:");
+  }
+
+  @Test
+  void svg_regex_tree_edit_trees_and_states() throws IOException, InterruptedException {
+    HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=%22[a]%22&edit&trees&states");
+    assertThat(response.statusCode()).isEqualTo(200);
+    assertThat(response.body())
+      .contains("digraph G {")
+      .contains("CharacterClassTree:1\\{")
+      .contains("EndOfRegex:");
+  }
+
+  @Test
+  void svg_regex_tree_trees() throws IOException, InterruptedException {
+    HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=%22[a]%22&trees");
+    assertThat(response.statusCode()).isEqualTo(200);
+    assertThat(response.body())
+      .contains("<svg").contains("</svg>")
+      .contains("CharacterClassTree:1{")
+      .doesNotContain("EndOfRegex:");
+  }
+
+  @Test
+  void svg_regex_tree_edit_trees() throws IOException, InterruptedException {
+    HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=%22[a]%22&edit&trees");
+    assertThat(response.statusCode()).isEqualTo(200);
+    assertThat(response.body())
+      .contains("digraph G {")
+      .contains("CharacterClassTree:1\\{")
+      .doesNotContain("EndOfRegex:");
   }
 
   @Test

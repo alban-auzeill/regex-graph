@@ -1,0 +1,61 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="SequenceTree:1\{\l  .range: \{0, 5, \"a++bc\"\}\l\}\l" ]
+  3[ label="RepetitionTree:3\{\l  .range: \{0, 3, \"a++\"\}\l\}\l" ]
+  4[ label="PlainCharacterTree:4\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  6[ label="PlainCharacterTree:6\{\l  .range: \{3, 4, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+  7[ label="PlainCharacterTree:7\{\l  .range: \{4, 5, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  5[ label="SimpleQuantifier:5\{\l  .range: \{1, 3, \"++\"\}\l  .modifier: POSSESSIVE\l  .kind: PLUS\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  9[ label="Branch:9\l" ]
+  8[ label="EndOfRegex:8\l  continuation: null\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
+  end[ label="\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
+  start[ label="\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="SlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  3 -> 4 [ taillabel="element" ]
+  3 -> 5 [ taillabel="quantifier" ]
+  1 -> 3 [ taillabel="items[0]" ]
+  1 -> 6 [ taillabel="items[1]" ]
+  1 -> 7 [ taillabel="items[2]" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 3 [ taillabel="" ]
+  3 -> 4 [ taillabel="" ]
+  6 -> 7 [ taillabel="" ]
+  7 -> 8 [ taillabel="" ]
+  9 -> 3 [ taillabel="1" ]
+  9 -> 6 [ taillabel="2" ]
+  8 -> end [ taillabel="" ]
+  start -> 1 [ taillabel="" ]
+
+  // possessive-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="tee", dir="both"]
+  4 -> 9 [ taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 8 [ taillabel="" ]
+  3 -> 6 [ taillabel="" ]
+  4 -> 9 [ taillabel="" ]
+  6 -> 7 [ taillabel="" ]
+  7 -> 8 [ taillabel="" ]
+  9 -> 6 [ taillabel="" ]
+}

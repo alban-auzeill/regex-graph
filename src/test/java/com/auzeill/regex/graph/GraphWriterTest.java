@@ -1,12 +1,17 @@
 package com.auzeill.regex.graph;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static com.auzeill.regex.graph.AbstractTestOnTextFiles.autoFixExpectedFileIfNeeded;
+import static com.auzeill.regex.graph.AbstractTestOnTextFiles.readFile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GraphWriterTest {
@@ -233,30 +238,24 @@ class GraphWriterTest {
   }
 
   @Test
-  void graph_null() {
-    assertThat(writer.graph(null)).isEqualTo("" +
-      "digraph G {\n" +
-      "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=9 ]\n" +
-      "}\n");
+  void graph_null() throws IOException {
+    String actual = writer.graph(null);
+    Path dotFile = expectedFile("graph_null.dot");
+    autoFixExpectedFileIfNeeded(dotFile, actual);
+    assertThat(actual).isEqualTo(readFile(dotFile));
   }
 
   @Test
-  void graph_one_node() {
+  void graph_one_node() throws IOException {
     A a = new A(32, -2);
-    assertThat(writer.graph(new B(a, 0, a))).isEqualTo("" +
-      "digraph G {\n" +
-      "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=11 ]\n" +
-      "\n" +
-      "  // default nodes\n" +
-      "  node [ fontname=\"Monospace\", fontsize=9, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
-      "  1[ label=\"GraphWriterTest$B:1\\{\\l  .a:\\l    GraphWriterTest$A:2\\{\\l      .a: 32\\l      .b: -2\\l    \\}\\l  .b: 0\\l  .c: \\{2\\}\\l\\}\\l\" ]\n" +
-      "}\n");
+    String actual = writer.graph(new B(a, 0, a));
+    Path dotFile = expectedFile("graph_one_node.dot");
+    autoFixExpectedFileIfNeeded(dotFile, actual);
+    assertThat(actual).isEqualTo(readFile(dotFile));
   }
 
   @Test
-  void graph_several_nodes() {
+  void graph_several_nodes() throws IOException {
     C o2 = new C();
     C o3 = new C();
     C o4 = new C();
@@ -267,33 +266,15 @@ class GraphWriterTest {
     o4.next = o3;
     o4.previous = o2;
     B o1 = new B(o2, 0, o2);
-    assertThat(writer.graph(o1)).isEqualTo("" +
-      "digraph G {\n" +
-      "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=11 ]\n" +
-      "\n" +
-      "  // default nodes\n" +
-      "  node [ fontname=\"Monospace\", fontsize=9, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
-      "  1[ label=\"GraphWriterTest$B:1\\{\\l  .b: 0\\l\\}\\l\" ]\n" +
-      "  2[ label=\"GraphWriterTest$C:2\\{\\l\\}\\l\" ]\n" +
-      "  3[ label=\"GraphWriterTest$C:3\\{\\l\\}\\l\" ]\n" +
-      "  4[ label=\"GraphWriterTest$C:4\\{\\l\\}\\l\" ]\n" +
-      "\n" +
-      "  // default edges\n" +
-      "  edge [ fontname=\"Monospace\", fontsize=11, color=\"Navy\" ]\n" +
-      "  3 -> 2 [ taillabel=\"previous\" ]\n" +
-      "  4 -> 2 [ taillabel=\"previous\" ]\n" +
-      "  4 -> 4 [ taillabel=\"next\" ]\n" +
-      "  3 -> 4 [ taillabel=\"next\" ]\n" +
-      "  2 -> 3 [ taillabel=\"previous\" ]\n" +
-      "  2 -> 4 [ taillabel=\"next\" ]\n" +
-      "  1 -> 2 [ taillabel=\"a\" ]\n" +
-      "  1 -> 2 [ taillabel=\"c\" ]\n" +
-      "}\n");
+
+    String actual = writer.graph(o1);
+    Path dotFile = expectedFile("graph_several_nodes.dot");
+    autoFixExpectedFileIfNeeded(dotFile, actual);
+    assertThat(actual).isEqualTo(readFile(dotFile));
   }
 
   @Test
-  void graph_array_list() {
+  void graph_array_list() throws IOException {
     C o3 = new C();
     o3.previous = null;
     o3.next = "next of o3";
@@ -310,22 +291,14 @@ class GraphWriterTest {
     o1.previous = o2;
     o1.next = o3;
 
-    assertThat(writer.graph(o1)).isEqualTo("" +
-      "digraph G {\n" +
-      "  rankdir=LR;\n" +
-      "  graph [ fontname=\"Monospace\", fontsize=11 ]\n" +
-      "\n" +
-      "  // default nodes\n" +
-      "  node [ fontname=\"Monospace\", fontsize=9, shape=box, style=\"rounded,filled\", color=\"LightGray\", fillcolor=\"Beige\" ]\n" +
-      "  1[ label=\"GraphWriterTest$C:1\\{\\l\\}\\l\" ]\n" +
-      "  3[ label=\"GraphWriterTest$C:3\\{\\l  .previous: null\\l  .next: \\\"next of o3\\\"\\l\\}\\l\" ]\n" +
-      "  4[ label=\"GraphWriterTest$C:4\\{\\l  .previous: null\\l  .next: \\\"next of o4\\\"\\l\\}\\l\" ]\n" +
-      "\n" +
-      "  // default edges\n" +
-      "  edge [ fontname=\"Monospace\", fontsize=9, color=\"Navy\" ]\n" +
-      "  1 -> 3 [ taillabel=\"previous[0]\" ]\n" +
-      "  1 -> 4 [ taillabel=\"previous[1]\" ]\n" +
-      "  1 -> 3 [ taillabel=\"next\" ]\n" +
-      "}\n");
+    String actual = writer.graph(o1);
+    Path dotFile = expectedFile("graph_array_list.dot");
+    autoFixExpectedFileIfNeeded(dotFile, actual);
+    assertThat(actual).isEqualTo(readFile(dotFile));
   }
+
+  static Path expectedFile(String fileName) {
+    return Paths.get("src", "test", "resources", "graph-writer").resolve(fileName);
+  }
+
 }

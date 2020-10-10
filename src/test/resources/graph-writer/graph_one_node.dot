@@ -1,0 +1,8 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="GraphWriterTest$B:1\{\l  .a:\l    GraphWriterTest$A:2\{\l      .a: 32\l      .b: -2\l    \}\l  .b: 0\l  .c: \{2\}\l\}\l" ]
+}

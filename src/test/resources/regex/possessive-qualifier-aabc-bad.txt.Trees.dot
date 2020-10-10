@@ -1,0 +1,21 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="SequenceTree:1\{\l  .range: \{0, 5, \"a++ac\"\}\l\}\l" ]
+  3[ label="RepetitionTree:3\{\l  .range: \{0, 3, \"a++\"\}\l\}\l" ]
+  4[ label="PlainCharacterTree:4\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  5[ label="SimpleQuantifier:5\{\l  .range: \{1, 3, \"++\"\}\l  .modifier: POSSESSIVE\l  .kind: PLUS\l\}\l" ]
+  6[ label="PlainCharacterTree:6\{\l  .range: \{3, 4, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  7[ label="PlainCharacterTree:7\{\l  .range: \{4, 5, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="SlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  3 -> 4 [ taillabel="element" ]
+  3 -> 5 [ taillabel="quantifier" ]
+  1 -> 3 [ taillabel="items[0]" ]
+  1 -> 6 [ taillabel="items[1]" ]
+  1 -> 7 [ taillabel="items[2]" ]
+}

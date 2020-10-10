@@ -1,0 +1,19 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="CharacterClassTree:1\{\l  .range: \{0, 5, \"[abc]\"\}\l  .openingBracket: \{'['\}\l  .negated: false\l\}\l" ]
+  2[ label="CharacterClassUnionTree:2\{\l  .range: \{1, 4, \"abc\"\}\l\}\l" ]
+  4[ label="PlainCharacterTree:4\{\l  .range: \{1, 2, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  5[ label="PlainCharacterTree:5\{\l  .range: \{2, 3, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+  6[ label="PlainCharacterTree:6\{\l  .range: \{3, 4, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="SlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  2 -> 4 [ taillabel="characterClasses[0]" ]
+  2 -> 5 [ taillabel="characterClasses[1]" ]
+  2 -> 6 [ taillabel="characterClasses[2]" ]
+  1 -> 2 [ taillabel="contents" ]
+}

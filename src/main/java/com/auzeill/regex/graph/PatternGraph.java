@@ -1,6 +1,7 @@
 package com.auzeill.regex.graph;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.regex.Pattern;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -11,7 +12,13 @@ public class PatternGraph extends GraphWriter {
   public static String transform(String stringLiteral) {
     String pattern = StringEscapeUtils.unescapeJava(stringLiteral.substring(1, stringLiteral.length() - 1));
     PatternGraph writer = new PatternGraph();
-    return writer.graph(Pattern.compile(pattern));
+    Object compiled;
+    try {
+      compiled = Pattern.compile(pattern);
+    } catch (Exception e) {
+      compiled = Collections.singleton(new DirectValue(e.getClass().getSimpleName() + ":\n" + e.getMessage()));
+    }
+    return writer.graph(compiled);
   }
 
   @Override

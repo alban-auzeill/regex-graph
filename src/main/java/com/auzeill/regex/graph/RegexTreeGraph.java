@@ -48,18 +48,22 @@ import org.sonar.plugins.java.api.tree.Tree.Kind;
 public class RegexTreeGraph extends GraphWriter {
 
   private final RegexParseResult result;
+  private final boolean includeTrees;
+  private final boolean includeStates;
 
-  public RegexTreeGraph(RegexParseResult result) {
+  public RegexTreeGraph(RegexParseResult result, boolean includeTrees, boolean includeStates) {
     this.result = result;
+    this.includeTrees = includeTrees;
+    this.includeStates = includeStates;
   }
 
-  public static String transform(String stringLiteral) {
+  public static String transform(String stringLiteral, boolean includeTrees, boolean includeStates) {
     InternalSyntaxToken token = new InternalSyntaxToken(1, 1, stringLiteral, Collections.emptyList(), false);
     LiteralTree literalTree = new LiteralTreeImpl(Kind.STRING_LITERAL, token);
     RegexSource source = new RegexSource(Collections.singletonList(literalTree));
     RegexParser parser = new RegexParser(source, new FlagSet());
     RegexParseResult result = parser.parse();
-    RegexTreeGraph writer = new RegexTreeGraph(result);
+    RegexTreeGraph writer = new RegexTreeGraph(result, includeTrees, includeStates);
     return writer.graph(result.getResult());
   }
 
@@ -143,12 +147,18 @@ public class RegexTreeGraph extends GraphWriter {
 
   @Override
   void extendsContext(Object object, GraphContext context) {
-    new AutomatonStateMetadataVisitor(context).visit(result);
+    if (includeStates) {
+      new AutomatonStateMetadataVisitor(context).visit(result);
+    }
     for (SyntaxError syntaxError : result.getSyntaxErrors()) {
       context.add(new Node(
         context.createObjectReference(syntaxError),
         "SyntaxError:\n" + syntaxError.getMessage(),
         "error"));
+    }
+    if (!includeTrees) {
+      context.edges().removeIf(edge -> edge.type.equals("default"));
+      context.nodes().removeIf(node -> node.type.equals("default"));
     }
   }
 

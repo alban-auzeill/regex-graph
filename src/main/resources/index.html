@@ -7,15 +7,48 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pattern Graph</title>
     <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        body {
+            margin: 1em 0 1em 0;
+        }
+        div.content {
+            display: block;
+            margin: 0 auto;
+        }
+        #svg-regex-trees, #svg-regex-states, #svg-regex-trees-and-states, #svg-pattern {
+            display: none;
+            padding: 10px;
+        }
+        :checked + #svg-regex-trees, :checked + #svg-regex-states, :checked + #svg-regex-trees-and-states, :checked + #svg-pattern {
+            display: block;
+        }
+    </style>
 </head>
-<body>
-<p><label for="regular-expression">Java Pattern in quoted Java String</label></p>
-<p><input type="text" name="regular-expression" id="regular-expression" style="width:90%;" onkeyup="onFilterChange()" placeholder="Java Regular Expression..." value='""' autofocus='autofocus'></p>
-<h3>org.sonar.java.regex.ast.RegexTree</h3>
-<p id="svg-regex-tree"></p>
-<hr />
-<h3>java.util.regex.Pattern</h3>
-<p id="svg-pattern"></p>
+<body onload="updateSVG()">
+<div class="content">
+    <p><label for="regular-expression">Java Pattern in quoted Java String</label></p>
+    <p><input type="text" name="regular-expression" id="regular-expression" style="width:90%;" onkeyup="onFilterChange()" placeholder="Java Regular Expression..." value='"a+"' autofocus='autofocus'></p>
+    <hr />
+
+    <b><label for="checkbox-svg-regex-trees">org.sonar.java.regex.ast.RegexTree</label></b>
+    <input type="checkbox" id="checkbox-svg-regex-trees" checked="checked" />
+    <p id="svg-regex-trees"></p>
+    <hr />
+
+    <b><label for="checkbox-svg-regex-states">org.sonar.java.regex.ast.AutomatonState</label></b>
+    <input type="checkbox" id="checkbox-svg-regex-states" checked="checked" />
+    <p id="svg-regex-states"></p>
+    <hr />
+
+    <b><label for="checkbox-svg-regex-trees-and-states">RegexTree & AutomatonState</label></b>
+    <input type="checkbox" id="checkbox-svg-regex-trees-and-states" checked="checked" />
+    <p id="svg-regex-trees-and-states"></p>
+    <hr />
+
+    <b><label for="checkbox-svg-pattern">java.util.regex.Pattern</label></b>
+    <input type="checkbox" id="checkbox-svg-pattern" checked="checked" />
+    <p id="svg-pattern"></p>
+</div>
 </body>
 <script>
   let lastTimeout = null;
@@ -31,15 +64,17 @@
     if (regexValue !== lastRegexValue) {
       lastRegexValue = regexValue;
       let encodedRegex =encodeURIComponent(regexValue);
+      updateInnerHTML(document.getElementById('svg-regex-trees'), '/regex-tree?exp=' + encodedRegex + '&trees');
+      updateInnerHTML(document.getElementById('svg-regex-states'), '/regex-tree?exp=' + encodedRegex + '&states');
+      updateInnerHTML(document.getElementById('svg-regex-trees-and-states'), '/regex-tree?exp=' + encodedRegex + '&trees&states');
       updateInnerHTML(document.getElementById('svg-pattern'), '/pattern?exp=' + encodedRegex);
-      updateInnerHTML(document.getElementById('svg-regex-tree'), '/regex-tree?exp=' + encodedRegex);
     }
   }
   function updateInnerHTML(htmlElement, url) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url);
     xhr.onload = function() {
-      let editLink = '<a href="' + url + '&edit" target="_blank">edit dot</a><br/>';
+      let editLink = '<a href="' + url + '&edit" target="_blank">source</a><br/>';
       htmlElement.innerHTML = editLink + (xhr.status === 200 ? xhr.responseText : 'HTTP Error ' + xhr.status);
     };
     xhr.send();

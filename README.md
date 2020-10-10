@@ -32,3 +32,15 @@ $ ./gradlew -Dport=8080 run
 ```
 
 ( using an IDE, execute `com.auzeill.regex.graph.Server` `main()` )
+
+## Test
+
+```sh
+$ ./gradlew test
+```
+
+Or to fix automatically the content of all `src/test/resources/**/*.dot` files:
+
+```sh
+$ ./gradlew test -DfixTest
+```

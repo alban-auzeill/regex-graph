@@ -1,0 +1,22 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="GraphWriterTest$B:1\{\l  .b: 0\l\}\l" ]
+  2[ label="GraphWriterTest$C:2\{\l\}\l" ]
+  3[ label="GraphWriterTest$C:3\{\l\}\l" ]
+  4[ label="GraphWriterTest$C:4\{\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  3 -> 2 [ taillabel="previous" ]
+  4 -> 2 [ taillabel="previous" ]
+  4 -> 4 [ taillabel="next" ]
+  3 -> 4 [ taillabel="next" ]
+  2 -> 3 [ taillabel="previous" ]
+  2 -> 4 [ taillabel="next" ]
+  1 -> 2 [ taillabel="a" ]
+  1 -> 2 [ taillabel="c" ]
+}

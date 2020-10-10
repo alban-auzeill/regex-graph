@@ -1,0 +1,54 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="SequenceTree:1\{\l  .range: \{0, 17, \"\\\\d*+(?<=[02468])\"\}\l\}\l" ]
+  3[ label="RepetitionTree:3\{\l  .range: \{0, 5, \"\\\\d*+\"\}\l\}\l" ]
+  4[ label="EscapedCharacterClassTree:4\{\l  .range: \{0, 3, \"\\\\d\"\}\l  .type: 'd'\l  .property: null\l\}\l" ]
+  6[ label="LookAroundTree:6\{\l  .range: \{5, 17, \"(?<=[02468])\"\}\l  .kind: LOOK_AROUND\l  .groupHeader: \{5, 9, \"(?<=\"\}\l  .polarity: POSITIVE\l  .direction: BEHIND\l\}\l" ]
+  7[ label="CharacterClassTree:7\{\l  .range: \{9, 16, \"[02468]\"\}\l  .openingBracket: \{'['\}\l  .negated: false\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  16[ label="Branch:16\l" ]
+  17[ label="EndOfLookAround:17\l  continuation: null\l" ]
+  15[ label="EndOfRegex:15\l  continuation: null\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
+  end[ label="\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
+  start[ label="\l" ]
+
+  // back-reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Red", arrowhead="vee", arrowtail="none", dir="both"]
+  17 -> 6 [ taillabel="back" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 3 [ taillabel="" ]
+  3 -> 4 [ taillabel="1" ]
+  3 -> 6 [ taillabel="2" ]
+  16 -> 3 [ taillabel="" ]
+  6 -> 7 [ taillabel="" ]
+  7 -> 17 [ taillabel="" ]
+  15 -> end [ taillabel="" ]
+  start -> 1 [ taillabel="" ]
+
+  // possessive-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="tee", dir="both"]
+  4 -> 16 [ taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 15 [ taillabel="" ]
+  3 -> 6 [ taillabel="" ]
+  4 -> 16 [ taillabel="" ]
+  16 -> 6 [ taillabel="" ]
+  6 -> 15 [ taillabel="" ]
+  7 -> 17 [ taillabel="" ]
+}

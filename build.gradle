@@ -18,11 +18,12 @@ dependencies {
     implementation 'org.sonarsource.java:java-frontend:6.9.0.23563'
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.0"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.7.0"
     testImplementation "org.assertj:assertj-core:3.11.1"
 }
 
 test {
-    systemProperties = [ 'dot': System.getProperty('dot') ]
+    systemProperties = [ 'dot': System.getProperty('dot'), 'fixTest': System.getProperty('fixTest'),  ]
     useJUnitPlatform()
     doFirst { jvmArgs += ['--add-opens', 'java.base/java.util.regex=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED' ] }
 }

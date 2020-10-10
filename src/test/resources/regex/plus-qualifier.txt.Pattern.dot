@@ -1,0 +1,22 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="Pattern:1\{\l  .pattern: \"a+bc\"\l  .flags: 0\l  .flags0: 0\l  .compiled: true\l  .normalizedPattern: \"a+bc\"\l  .buffer: null\l  .predicate: null\l  .namedGroups: null\l  .groupNodes: null\l  .topClosureNodes: null\l  .localTCNCount: 0\l  .hasGroupRef: false\l  .temp: null\l  .capturingGroupCount: 1\l  .localCount: 0\l  .cursor: 4\l  .patternLength: 0\l  .hasSupplementary: false\l\}\l" ]
+  2[ label="Start:2\{\l  .minLength: 3\l\}\l" ]
+  3[ label="BmpCharPropertyGreedy:3\{\l  .predicate:\l    $Lambda:8\{\l      .arg$1: 'a'\l    \}\l  .cmin: 1\l\}\l" ]
+  4[ label="Slice:4\{\l  .buffer: :7[ 'b', 'c' ]\l\}\l" ]
+  5[ label="LastNode:5\{\l\}\l" ]
+  6[ label="Node:6\{\l  .next: null\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  5 -> 6 [ taillabel="next" ]
+  4 -> 5 [ taillabel="next" ]
+  3 -> 4 [ taillabel="next" ]
+  2 -> 3 [ taillabel="next" ]
+  1 -> 2 [ taillabel="root" ]
+  1 -> 3 [ taillabel="matchRoot" ]
+}
