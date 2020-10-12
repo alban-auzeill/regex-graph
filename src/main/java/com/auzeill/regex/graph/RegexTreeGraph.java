@@ -202,7 +202,7 @@ public class RegexTreeGraph extends GraphWriter {
       context.add(new Edge("7", "8", "continuation ", "", "continuation"));
       context.add(new Edge("8", "9", "negation ", "", "negation-successor"));
       context.add(new Edge("9", "10", "backtracking   ", "", "backtracking-successor"));
-      context.add(new Edge("10", "11", "back reference  ", "", "back-reference"));
+      context.add(new Edge("10", "11", "reference  ", "", "back-reference"));
     } else {
       if (includeStates) {
         new AutomatonStateMetadataVisitor(context).visit(result);
@@ -264,7 +264,7 @@ public class RegexTreeGraph extends GraphWriter {
         if (capturingGroup != null) {
           String sourceReference = context.getNodeReference(backReferenceTree);
           String targetReference = context.getNodeReference(capturingGroup);
-          context.add(new Edge(sourceReference, targetReference, "group", "back-reference"));
+          context.add(new Edge(sourceReference, targetReference, "reference", "back-reference"));
         }
       }
     }
@@ -417,7 +417,7 @@ public class RegexTreeGraph extends GraphWriter {
         String elementReference = context.getNodeReference(tree.getElement());
         String endNodeReference = context.createReference();
         context.add(new Node(endNodeReference, "EndOfLookAround:" + endNodeReference + "\n  continuation: null\n", "state"));
-        context.add(new Edge(endNodeReference, treeReference, "back", "back-reference"));
+        context.add(new Edge(endNodeReference, treeReference, "parent", "back-reference"));
         if (tree.getPolarity() == LookAroundTree.Polarity.NEGATIVE) {
           String negationNode = context.createReference();
           context.add(new Node(negationNode, "Negation:" + negationNode, "state"));

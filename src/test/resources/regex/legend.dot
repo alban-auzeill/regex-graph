@@ -54,5 +54,5 @@ digraph G {
 
   // back-reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  10 -> 11 [ label="back reference  ",  taillabel="" ]
+  10 -> 11 [ label="reference  ",  taillabel="" ]
 }
