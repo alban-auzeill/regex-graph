@@ -50,5 +50,6 @@ digraph G {
   4 -> 16 [ taillabel="" ]
   16 -> 6 [ taillabel="" ]
   6 -> 15 [ taillabel="" ]
+  17 -> 15 [ taillabel="" ]
   7 -> 17 [ taillabel="" ]
 }

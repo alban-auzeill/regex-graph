@@ -370,6 +370,7 @@ public class RegexTreeGraph extends GraphWriter {
         }
         successorMap.put(elementReference, Collections.singletonList(endNodeReference));
         continuationMap.put(elementReference, endNodeReference);
+        continuationMap.put(endNodeReference, getContinuation(tree));
       }
       super.visitLookAround(tree);
     }
@@ -383,17 +384,25 @@ public class RegexTreeGraph extends GraphWriter {
         String endNodeReference = context.createReference();
         context.add(new Node(endNodeReference, "Branch:" + endNodeReference, "state"));
         List<String> endNodeSuccessors = new ArrayList<>();
-        if (tree.getQuantifier().getMinimumRepetitions() > 0) {
-          endNodeSuccessors.addAll(getSuccessors(tree));
-        }
+        boolean noLoop = tree.getQuantifier().getMaximumRepetitions() != null &&
+          tree.getQuantifier().getMaximumRepetitions() <= 1;
         Quantifier.Modifier modifier = tree.getQuantifier().getModifier();
-        if (modifier == Quantifier.Modifier.RELUCTANT) {
-          endNodeSuccessors.add(treeReference);
-        } else if (modifier == Quantifier.Modifier.POSSESSIVE) {
+        if (noLoop) {
+          endNodeSuccessors.addAll(getSuccessors(tree));
+        } else {
+          if (tree.getQuantifier().getMinimumRepetitions() > 0) {
+            endNodeSuccessors.addAll(getSuccessors(tree));
+          }
+          if (modifier == Quantifier.Modifier.RELUCTANT) {
+            endNodeSuccessors.add(treeReference);
+          } else if (modifier == Quantifier.Modifier.POSSESSIVE) {
+            endNodeSuccessors.add(0, treeReference);
+          } else { // GREEDY
+            endNodeSuccessors.add(0, treeReference);
+          }
+        }
+        if (modifier == Quantifier.Modifier.POSSESSIVE) {
           continuationHeadType.put(endNodeReference, "possessive-successor");
-          endNodeSuccessors.add(0, treeReference);
-        } else { // GREEDY
-          endNodeSuccessors.add(0, treeReference);
         }
         if (tree.getQuantifier().getMinimumRepetitions() == 0) {
           if (modifier == Quantifier.Modifier.RELUCTANT) {
