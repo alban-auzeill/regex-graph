@@ -50,21 +50,37 @@ public class RegexTreeGraph extends GraphWriter {
   private final RegexParseResult result;
   private final boolean includeTrees;
   private final boolean includeStates;
+  private final boolean onlyLegend;
 
-  public RegexTreeGraph(RegexParseResult result, boolean includeTrees, boolean includeStates) {
+  public RegexTreeGraph(RegexParseResult result, boolean includeTrees, boolean includeStates, boolean onlyLegend) {
     this.result = result;
     this.includeTrees = includeTrees;
     this.includeStates = includeStates;
+    this.onlyLegend = onlyLegend;
   }
 
-  public static String transform(String stringLiteral, boolean includeTrees, boolean includeStates) {
-    InternalSyntaxToken token = new InternalSyntaxToken(1, 1, stringLiteral, Collections.emptyList(), false);
-    LiteralTree literalTree = new LiteralTreeImpl(Kind.STRING_LITERAL, token);
-    RegexSource source = new RegexSource(Collections.singletonList(literalTree));
-    RegexParser parser = new RegexParser(source, new FlagSet());
-    RegexParseResult result = parser.parse();
-    RegexTreeGraph writer = new RegexTreeGraph(result, includeTrees, includeStates);
-    return writer.graph(result.getResult());
+  public static String transform(String stringLiteral, boolean includeTrees, boolean includeStates, boolean onlyLegend) {
+    RegexParseResult result = null;
+    if (!onlyLegend) {
+      InternalSyntaxToken token = new InternalSyntaxToken(1, 1, stringLiteral, Collections.emptyList(), false);
+      LiteralTree literalTree = new LiteralTreeImpl(Kind.STRING_LITERAL, token);
+      RegexSource source = new RegexSource(Collections.singletonList(literalTree));
+      RegexParser parser = new RegexParser(source, new FlagSet());
+      result = parser.parse();
+    }
+    RegexTreeGraph writer = new RegexTreeGraph(result, includeTrees, includeStates, onlyLegend);
+    return writer.graph(result != null ? result.getResult() : null);
+  }
+
+  @Override
+  void writeGraphStyle(StringBuilder out) {
+    if (onlyLegend) {
+      out.append(INDENTATION).append("rankdir=LR;").append(NL);
+      out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\", pad=\"0.01\", nodesep=\"0.01\", ranksep=\"0.01\"]").append(NL);
+    } else {
+      out.append(INDENTATION).append("rankdir=LR;").append(NL);
+      out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\"]").append(NL);
+    }
   }
 
   @Override
@@ -102,6 +118,13 @@ public class RegexTreeGraph extends GraphWriter {
         fixedSize="true";
         width="0.12";
         break;
+      case "plaintext":
+        shape = "plaintext";
+        style="none";
+        fillColor = "none";
+        fixedSize="true";
+        width="0.12";
+        break;
     }
     out.append(INDENTATION).append("node [fontname=\"Monospace\", fontsize= \"9\", shape=\"").append(shape)
       .append("\", style=\"").append(style).append("\", color=\"").append(color).append("\", fillcolor=\"")
@@ -115,50 +138,85 @@ public class RegexTreeGraph extends GraphWriter {
     String arrowHead = "vee";
     String style = "solid";
     String color = "SlateGray";
+    String fontColor = "DarkSlateGray";
     switch (edgeType) {
       case "successor":
         style = "bold";
         color = "DodgerBlue";
+        fontColor = "MediumBlue";
         break;
       case "backtracking-successor":
         arrowHead = "icurvevee";
         style = "bold";
         color = "DodgerBlue";
+        fontColor = "MediumBlue";
         break;
       case "negation-successor":
         arrowTail = "odot";
         style = "bold";
         color = "DodgerBlue";
+        fontColor = "MediumBlue";
         break;
       case "continuation":
         style = "dashed";
         color = "DodgerBlue";
+        fontColor = "MediumBlue";
         break;
       case "back-reference":
         style = "dashed";
         color = "Red";
+        fontColor = "Firebrick";
+        break;
+      case "transparent":
+        style = "invis";
+        color = "transparent";
         break;
     }
     out.append(INDENTATION).append("edge [fontname=\"Monospace\", fontsize=\"9\", style=\"").append(style)
-      .append("\", color=\"").append(color).append("\", fontcolor=\"").append(color)
+      .append("\", color=\"").append(color).append("\", fontcolor=\"").append(fontColor)
       .append("\", arrowhead=\"").append(arrowHead).append("\", arrowtail=\"").append(arrowTail)
       .append("\", dir=\"both\"]").append(NL);
   }
 
   @Override
   void extendsContext(Object object, GraphContext context) {
-    if (includeStates) {
-      new AutomatonStateMetadataVisitor(context).visit(result);
-    }
-    for (SyntaxError syntaxError : result.getSyntaxErrors()) {
-      context.add(new Node(
-        context.createObjectReference(syntaxError),
-        "SyntaxError:\n" + syntaxError.getMessage(),
-        "error"));
-    }
-    if (!includeTrees) {
-      context.edges().removeIf(edge -> edge.type.equals("default"));
-      context.nodes().removeIf(node -> node.type.equals("default"));
+    if (onlyLegend) {
+      context.add(new Node("1", "AST", "default"));
+      context.add(new Node("2", "", "plaintext"));
+      context.add(new Node("3", "", "plaintext"));
+      context.add(new Node("4", "AST & State", "tree-and-state"));
+      context.add(new Node("5", "State", "state"));
+      context.add(new Node("6", "", "plaintext"));
+      context.add(new Node("7", "", "plaintext"));
+      context.add(new Node("8", "", "plaintext"));
+      context.add(new Node("9", "", "plaintext"));
+      context.add(new Node("10", "", "plaintext"));
+      context.add(new Node("11", "", "plaintext"));
+
+      context.add(new Edge("1", "2", "", "", "transparent"));
+      context.add(new Edge("2", "3", "AST hierarchy  ", "", "default"));
+      context.add(new Edge("3", "4", "", "", "transparent"));
+      context.add(new Edge("4", "5", "", "", "transparent"));
+      context.add(new Edge("5", "6", "", "", "transparent"));
+      context.add(new Edge("6", "7", "successor ", "", "successor"));
+      context.add(new Edge("7", "8", "continuation ", "", "continuation"));
+      context.add(new Edge("8", "9", "negation ", "", "negation-successor"));
+      context.add(new Edge("9", "10", "backtracking   ", "", "backtracking-successor"));
+      context.add(new Edge("10", "11", "back reference  ", "", "back-reference"));
+    } else {
+      if (includeStates) {
+        new AutomatonStateMetadataVisitor(context).visit(result);
+      }
+      for (SyntaxError syntaxError : result.getSyntaxErrors()) {
+        context.add(new Node(
+          context.createObjectReference(syntaxError),
+          "SyntaxError:\n" + syntaxError.getMessage(),
+          "error"));
+      }
+      if (!includeTrees) {
+        context.edges().removeIf(edge -> edge.type.equals("default"));
+        context.nodes().removeIf(node -> node.type.equals("default"));
+      }
     }
   }
 

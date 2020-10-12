@@ -20,13 +20,13 @@ digraph G {
   start[ label="\l" ]
 
   // successor edges
-  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> 7 [ taillabel="" ]
-  StartState -> 1 [ taillabel="" ]
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 7 [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
 
   // continuation edges
-  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> 7 [ taillabel="" ]
-  7 -> end [ taillabel="" ]
-  start -> StartState [ taillabel="" ]
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 7 [ label="",  taillabel="" ]
+  7 -> end [ label="",  taillabel="" ]
+  start -> StartState [ label="",  taillabel="" ]
 }

@@ -11,8 +11,8 @@ digraph G {
 
   // default edges
   edge [fontname="Monospace", fontsize="9", color="Navy"]
-  3 -> 4 [ taillabel="next" ]
-  2 -> 3 [ taillabel="next" ]
-  1 -> 2 [ taillabel="root" ]
-  1 -> 3 [ taillabel="matchRoot" ]
+  3 -> 4 [ label="",  taillabel="next" ]
+  2 -> 3 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="root" ]
+  1 -> 3 [ label="",  taillabel="matchRoot" ]
 }

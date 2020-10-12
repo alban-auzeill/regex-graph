@@ -12,10 +12,10 @@ digraph G {
   7[ label="PlainCharacterTree:7\{\l  .range: \{3, 4, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
 
   // default edges
-  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="SlateGray", arrowhead="vee", arrowtail="none", dir="both"]
-  3 -> 4 [ taillabel="element" ]
-  3 -> 5 [ taillabel="quantifier" ]
-  1 -> 3 [ taillabel="items[0]" ]
-  1 -> 6 [ taillabel="items[1]" ]
-  1 -> 7 [ taillabel="items[2]" ]
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  3 -> 4 [ label="",  taillabel="element" ]
+  3 -> 5 [ label="",  taillabel="quantifier" ]
+  1 -> 3 [ label="",  taillabel="items[0]" ]
+  1 -> 6 [ label="",  taillabel="items[1]" ]
+  1 -> 7 [ label="",  taillabel="items[2]" ]
 }

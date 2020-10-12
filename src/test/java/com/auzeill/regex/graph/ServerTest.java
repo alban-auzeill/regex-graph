@@ -60,6 +60,17 @@ class ServerTest {
   }
 
   @Test
+  void svg_regex_legend() throws IOException, InterruptedException {
+    HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=%22[a]%22&legend");
+    assertThat(response.statusCode()).isEqualTo(200);
+    assertThat(response.body())
+      .contains("<svg").contains("</svg>")
+      .doesNotContain("CharacterClassTree")
+      .contains("State")
+      .contains("negation");
+  }
+
+  @Test
   void svg_regex_tree_trees_and_states() throws IOException, InterruptedException {
     HttpResponse<String> response = httpGet(server_url + "/regex-tree?exp=%22[a]%22&trees&states");
     assertThat(response.statusCode()).isEqualTo(200);

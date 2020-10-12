@@ -1,0 +1,58 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11", pad="0.01", nodesep="0.01", ranksep="0.01"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="AST\l" ]
+
+  // plaintext nodes
+  node [fontname="Monospace", fontsize= "9", shape="plaintext", style="none", color="LightGray", fillcolor="none", fixedsize="true", width="0.12"]
+  2[ label="\l" ]
+  3[ label="\l" ]
+  6[ label="\l" ]
+  7[ label="\l" ]
+  8[ label="\l" ]
+  9[ label="\l" ]
+  10[ label="\l" ]
+  11[ label="\l" ]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  4[ label="AST & State\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  5[ label="State\l" ]
+
+  // transparent edges
+  edge [fontname="Monospace", fontsize="9", style="invis", color="transparent", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 2 [ label="",  taillabel="" ]
+  3 -> 4 [ label="",  taillabel="" ]
+  4 -> 5 [ label="",  taillabel="" ]
+  5 -> 6 [ label="",  taillabel="" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  2 -> 3 [ label="AST hierarchy  ",  taillabel="" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  6 -> 7 [ label="successor ",  taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  7 -> 8 [ label="continuation ",  taillabel="" ]
+
+  // negation-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="odot", dir="both"]
+  8 -> 9 [ label="negation ",  taillabel="" ]
+
+  // backtracking-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="icurvevee", arrowtail="none", dir="both"]
+  9 -> 10 [ label="backtracking   ",  taillabel="" ]
+
+  // back-reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  10 -> 11 [ label="back reference  ",  taillabel="" ]
+}

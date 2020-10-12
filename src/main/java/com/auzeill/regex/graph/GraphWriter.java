@@ -59,7 +59,7 @@ public class GraphWriter {
         writeEdgesStyle(out, type);
         edges.forEach(edge -> out.append("  ")
           .append(edge.source).append(" -> ").append(edge.target)
-          .append(" [ taillabel=").append(writeCenteredDotLabel(edge.label)).append(" ]")
+          .append(" [ label=").append(writeCenteredDotLabel(edge.centerLabel)).append(",  taillabel=").append(writeCenteredDotLabel(edge.tailLabel)).append(" ]")
           .append(NL));
       });
     out.append("}").append(NL);

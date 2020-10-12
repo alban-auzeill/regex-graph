@@ -11,12 +11,12 @@ digraph G {
 
   // default edges
   edge [fontname="Monospace", fontsize="9", color="Navy"]
-  3 -> 2 [ taillabel="previous" ]
-  4 -> 2 [ taillabel="previous" ]
-  4 -> 4 [ taillabel="next" ]
-  3 -> 4 [ taillabel="next" ]
-  2 -> 3 [ taillabel="previous" ]
-  2 -> 4 [ taillabel="next" ]
-  1 -> 2 [ taillabel="a" ]
-  1 -> 2 [ taillabel="c" ]
+  3 -> 2 [ label="",  taillabel="previous" ]
+  4 -> 2 [ label="",  taillabel="previous" ]
+  4 -> 4 [ label="",  taillabel="next" ]
+  3 -> 4 [ label="",  taillabel="next" ]
+  2 -> 3 [ label="",  taillabel="previous" ]
+  2 -> 4 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="a" ]
+  1 -> 2 [ label="",  taillabel="c" ]
 }

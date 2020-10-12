@@ -10,7 +10,7 @@ digraph G {
 
   // default edges
   edge [fontname="Monospace", fontsize="9", color="Navy"]
-  1 -> 3 [ taillabel="previous[0]" ]
-  1 -> 4 [ taillabel="previous[1]" ]
-  1 -> 3 [ taillabel="next" ]
+  1 -> 3 [ label="",  taillabel="previous[0]" ]
+  1 -> 4 [ label="",  taillabel="previous[1]" ]
+  1 -> 3 [ label="",  taillabel="next" ]
 }

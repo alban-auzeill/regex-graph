@@ -102,13 +102,19 @@ public class GraphContext {
   public static class Edge {
     public final String source;
     public final String target;
-    public final String label;
+    public final String centerLabel;
+    public final String tailLabel;
     public final String type;
 
-    public Edge(String source, String target, String label, String type) {
+    public Edge(String source, String target, String tailLabel, String type) {
+      this(source, target, "", tailLabel, type);
+    }
+
+    public Edge(String source, String target, String centerLabel, String tailLabel, String type) {
       this.source = source;
       this.target = target;
-      this.label = label;
+      this.centerLabel = centerLabel;
+      this.tailLabel = tailLabel;
       this.type = type;
     }
   }

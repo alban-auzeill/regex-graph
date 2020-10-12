@@ -26,8 +26,13 @@
 </head>
 <body onload="updateSVG()">
 <div class="content">
-    <p><label for="regular-expression">Java Pattern in quoted Java String</label></p>
-    <p><input type="text" name="regular-expression" id="regular-expression" style="width:90%;" onkeyup="onFilterChange()" placeholder="Java Regular Expression..." value='"a+"' autofocus='autofocus'></p>
+    <h2>Java Pattern in quoted Java String</h2>
+    <p>
+        <b>Graph Legend:</b><br/>
+        <div id="graph-legend"></div>
+        <label for="regular-expression"><b>Regular Expression:</b></label><br/>
+        <input type="text" name="regular-expression" id="regular-expression" style="width:90%;margin:3px;" onkeyup="onFilterChange()" placeholder="Java Regular Expression..." value='"a+"' autofocus='autofocus'><br/>
+    </p>
     <hr />
 
     <b><label for="checkbox-svg-regex-trees">org.sonar.java.regex.ast.RegexTree</label></b>
@@ -64,18 +69,19 @@
     if (regexValue !== lastRegexValue) {
       lastRegexValue = regexValue;
       let encodedRegex =encodeURIComponent(regexValue);
-      updateInnerHTML(document.getElementById('svg-regex-trees'), '/regex-tree?exp=' + encodedRegex + '&trees');
-      updateInnerHTML(document.getElementById('svg-regex-states'), '/regex-tree?exp=' + encodedRegex + '&states');
-      updateInnerHTML(document.getElementById('svg-regex-trees-and-states'), '/regex-tree?exp=' + encodedRegex + '&trees&states');
-      updateInnerHTML(document.getElementById('svg-pattern'), '/pattern?exp=' + encodedRegex);
+      updateInnerHTML(document.getElementById('graph-legend'), '/regex-tree?exp=%22%22&legend', false);
+      updateInnerHTML(document.getElementById('svg-regex-trees'), '/regex-tree?exp=' + encodedRegex + '&trees', true);
+      updateInnerHTML(document.getElementById('svg-regex-states'), '/regex-tree?exp=' + encodedRegex + '&states', true);
+      updateInnerHTML(document.getElementById('svg-regex-trees-and-states'), '/regex-tree?exp=' + encodedRegex + '&trees&states', true);
+      updateInnerHTML(document.getElementById('svg-pattern'), '/pattern?exp=' + encodedRegex, true);
     }
   }
-  function updateInnerHTML(htmlElement, url) {
+  function updateInnerHTML(htmlElement, url, showSource) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url);
     xhr.onload = function() {
-      let editLink = '<a href="' + url + '&edit" target="_blank">source</a><br/>';
-      htmlElement.innerHTML = editLink + (xhr.status === 200 ? xhr.responseText : 'HTTP Error ' + xhr.status);
+      let sourceLink = showSource === true ? '<a href="' + url + '&edit" target="_blank">source</a><br/>' : '';
+      htmlElement.innerHTML = sourceLink + (xhr.status === 200 ? xhr.responseText : 'HTTP Error ' + xhr.status);
     };
     xhr.send();
   }

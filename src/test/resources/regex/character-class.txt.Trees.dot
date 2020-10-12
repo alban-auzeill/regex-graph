@@ -11,9 +11,9 @@ digraph G {
   6[ label="PlainCharacterTree:6\{\l  .range: \{3, 4, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
 
   // default edges
-  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="SlateGray", arrowhead="vee", arrowtail="none", dir="both"]
-  2 -> 4 [ taillabel="characterClasses[0]" ]
-  2 -> 5 [ taillabel="characterClasses[1]" ]
-  2 -> 6 [ taillabel="characterClasses[2]" ]
-  1 -> 2 [ taillabel="contents" ]
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  2 -> 4 [ label="",  taillabel="characterClasses[0]" ]
+  2 -> 5 [ label="",  taillabel="characterClasses[1]" ]
+  2 -> 6 [ label="",  taillabel="characterClasses[2]" ]
+  1 -> 2 [ label="",  taillabel="contents" ]
 }

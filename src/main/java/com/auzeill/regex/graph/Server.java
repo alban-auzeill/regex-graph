@@ -48,7 +48,8 @@ public class Server extends NanoHTTPD {
             }
             boolean includeTrees = parameters.containsKey("trees");
             boolean includeStates = parameters.containsKey("states");
-            String dot = session.getUri().equals("/pattern") ? PatternGraph.transform(stringLiteral) : RegexTreeGraph.transform(stringLiteral, includeTrees, includeStates);
+            boolean legend = parameters.containsKey("legend");
+            String dot = session.getUri().equals("/pattern") ? PatternGraph.transform(stringLiteral) : RegexTreeGraph.transform(stringLiteral, includeTrees, includeStates, legend);
             if (parameters.containsKey("edit")) {
               String html = "<pre>\n" + dot.replace("&", "&amp;").replace("<", "&lt;") + "</pre>\n";
               return newFixedLengthResponse(Response.Status.OK, NanoHTTPD.MIME_HTML, html);
