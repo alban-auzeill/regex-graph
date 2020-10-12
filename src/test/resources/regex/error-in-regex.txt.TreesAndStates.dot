@@ -12,6 +12,7 @@ digraph G {
   // state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
   7[ label="EndOfRegex:7\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
 
   // end nodes
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
@@ -34,10 +35,11 @@ digraph G {
   // successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 7 [ taillabel="" ]
-  7 -> end [ taillabel="" ]
-  start -> 1 [ taillabel="" ]
+  StartState -> 1 [ taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 7 [ taillabel="" ]
+  7 -> end [ taillabel="" ]
+  start -> StartState [ taillabel="" ]
 }

@@ -120,8 +120,8 @@ public class RegexTreeGraph extends GraphWriter {
         style = "bold";
         color = "DodgerBlue";
         break;
-      case "possessive-successor":
-        arrowTail = "tee";
+      case "backtracking-successor":
+        arrowHead = "icurvevee";
         style = "bold";
         color = "DodgerBlue";
         break;
@@ -192,9 +192,11 @@ public class RegexTreeGraph extends GraphWriter {
         continuationMap.forEach(this::createContinuationEdge);
 
         context.add(new Node("end", "", "end"));
-        context.add(new Edge(endOfRegexReference, "end", "", "successor"));
+        context.add(new Edge(endOfRegexReference, "end", "", "continuation"));
+        context.add(new Node("StartState", "StartState", "state"));
+        context.add(new Edge("StartState", context.getNodeReference(firstNode), "", "successor"));
         context.add(new Node("start", "", "start"));
-        context.add(new Edge("start", context.getNodeReference(firstNode), "", "successor"));
+        context.add(new Edge("start", "StartState", "", "continuation"));
       }
     }
 
@@ -368,6 +370,11 @@ public class RegexTreeGraph extends GraphWriter {
         } else {
           successorMap.put(treeReference, Collections.singletonList(elementReference));
         }
+        if (tree.getDirection() == LookAroundTree.Direction.BEHIND) {
+          continuationHeadType.put(treeReference, "backtracking-successor");
+        } else {
+          continuationHeadType.put(endNodeReference, "backtracking-successor");
+        }
         successorMap.put(elementReference, Collections.singletonList(endNodeReference));
         continuationMap.put(elementReference, endNodeReference);
         continuationMap.put(endNodeReference, getContinuation(tree));
@@ -383,6 +390,7 @@ public class RegexTreeGraph extends GraphWriter {
         String elementReference = context.getNodeReference(tree.getElement());
         String endNodeReference = context.createReference();
         context.add(new Node(endNodeReference, "Branch:" + endNodeReference, "state"));
+        context.add(new Edge(endNodeReference, treeReference, "possessive", "back-reference"));
         List<String> endNodeSuccessors = new ArrayList<>();
         boolean noLoop = tree.getQuantifier().getMaximumRepetitions() != null &&
           tree.getQuantifier().getMaximumRepetitions() <= 1;
@@ -400,9 +408,6 @@ public class RegexTreeGraph extends GraphWriter {
           } else { // GREEDY
             endNodeSuccessors.add(0, treeReference);
           }
-        }
-        if (modifier == Quantifier.Modifier.POSSESSIVE) {
-          continuationHeadType.put(endNodeReference, "possessive-successor");
         }
         if (tree.getQuantifier().getMinimumRepetitions() == 0) {
           if (modifier == Quantifier.Modifier.RELUCTANT) {

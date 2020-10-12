@@ -25,6 +25,7 @@ digraph G {
   16[ label="Branch:16\l" ]
   17[ label="EndOfLookAround:17\l  continuation: null\l" ]
   15[ label="EndOfRegex:15\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
 
   // end nodes
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
@@ -50,22 +51,22 @@ digraph G {
 
   // back-reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Red", arrowhead="vee", arrowtail="none", dir="both"]
+  16 -> 3 [ taillabel="possessive" ]
   17 -> 6 [ taillabel="back" ]
 
   // successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 3 [ taillabel="" ]
   3 -> 4 [ taillabel="1" ]
-  3 -> 6 [ taillabel="2" ]
+  4 -> 16 [ taillabel="" ]
   16 -> 3 [ taillabel="" ]
   6 -> 7 [ taillabel="" ]
   7 -> 17 [ taillabel="" ]
-  15 -> end [ taillabel="" ]
-  start -> 1 [ taillabel="" ]
+  StartState -> 1 [ taillabel="" ]
 
-  // possessive-successor edges
-  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="tee", dir="both"]
-  4 -> 16 [ taillabel="" ]
+  // backtracking-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="icurvevee", arrowtail="none", dir="both"]
+  3 -> 6 [ taillabel="2" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
@@ -76,4 +77,6 @@ digraph G {
   6 -> 15 [ taillabel="" ]
   17 -> 15 [ taillabel="" ]
   7 -> 17 [ taillabel="" ]
+  15 -> end [ taillabel="" ]
+  start -> StartState [ taillabel="" ]
 }

@@ -14,6 +14,7 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
   9[ label="Branch:9\l" ]
   8[ label="EndOfRegex:8\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
 
   // end nodes
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
@@ -23,20 +24,20 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
   start[ label="\l" ]
 
+  // back-reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Red", arrowhead="vee", arrowtail="none", dir="both"]
+  9 -> 3 [ taillabel="possessive" ]
+
   // successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 3 [ taillabel="" ]
   3 -> 4 [ taillabel="" ]
+  4 -> 9 [ taillabel="" ]
   6 -> 7 [ taillabel="" ]
   7 -> 8 [ taillabel="" ]
   9 -> 3 [ taillabel="1" ]
   9 -> 6 [ taillabel="2" ]
-  8 -> end [ taillabel="" ]
-  start -> 1 [ taillabel="" ]
-
-  // possessive-successor edges
-  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="tee", dir="both"]
-  4 -> 9 [ taillabel="" ]
+  StartState -> 1 [ taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="DodgerBlue", arrowhead="vee", arrowtail="none", dir="both"]
@@ -46,4 +47,6 @@ digraph G {
   6 -> 7 [ taillabel="" ]
   7 -> 8 [ taillabel="" ]
   9 -> 6 [ taillabel="" ]
+  8 -> end [ taillabel="" ]
+  start -> StartState [ taillabel="" ]
 }
