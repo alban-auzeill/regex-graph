@@ -45,7 +45,7 @@ public abstract class AbstractTestOnTextFiles {
   }
 
   static void autoFixExpectedFileIfNeeded(Path expectedFile, String content) throws IOException {
-    if (System.getProperty("fixTest") != null) {
+    if ("true".equals(System.getProperty("fixTest"))) {
       Files.writeString(expectedFile, content, UTF_8);
     }
   }

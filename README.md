@@ -42,5 +42,5 @@ $ ./gradlew test
 Or to fix automatically the content of all `src/test/resources/**/*.dot` files:
 
 ```sh
-$ ./gradlew test -DfixTest
+$ ./gradlew test -DfixTest=true
 ```
