@@ -1,0 +1,43 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="SequenceTree:1\{\l  .range: \{0, 5, \"(?i)a\"\}\l\}\l" ]
+  3[ label="NonCapturingGroupTree:3\{\l  .range: \{0, 4, \"(?i)\"\}\l  .kind: NON_CAPTURING_GROUP\l  .element: null\l  .groupHeader: null\l  .enabledFlags:\l    FlagSet:4\{\l      .mask: 2\l      .flagCharacters:\l        :5\{\l          2: \{'i'\}\l        \}\l    \}\l  .disabledFlags:\l    FlagSet:6\{\l      .mask: 0\l      .flagCharacters: :7\{ \}\l    \}\l\}\l" ]
+  8[ label="PlainCharacterTree:8\{\l  .range: \{4, 5, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  9[ label="EndOfRegex:9\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
+  end[ label="\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
+  start[ label="\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 3 [ label="",  taillabel="items[0]" ]
+  1 -> 8 [ label="",  taillabel="items[1]" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 3 [ label="",  taillabel="" ]
+  3 -> 8 [ label="",  taillabel="" ]
+  8 -> 9 [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 9 [ label="",  taillabel="" ]
+  3 -> 8 [ label="",  taillabel="" ]
+  8 -> 9 [ label="",  taillabel="" ]
+  9 -> end [ label="",  taillabel="" ]
+  start -> StartState [ label="",  taillabel="" ]
+}

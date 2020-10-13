@@ -1,0 +1,8 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="EscapedCharacterClassTree:1\{\l  .range: \{0, 18, \"\\\\p\{javaLowerCase\}\"\}\l  .type: 'p'\l  .property: \"javaLowerCase\"\l\}\l" ]
+}

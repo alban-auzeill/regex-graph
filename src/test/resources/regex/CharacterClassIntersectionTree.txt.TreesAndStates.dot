@@ -1,0 +1,60 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="CharacterClassTree:1\{\l  .range: \{0, 14, \"[a-z&&[aeiou]]\"\}\l  .openingBracket: \{'['\}\l  .negated: false\l\}\l" ]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  2[ label="CharacterClassIntersectionTree:2\{\l  .range: \{1, 13, \"a-z&&[aeiou]\"\}\l  .andOperators: :15[ \{4, 6, \"&&\"\} ]\l\}\l" ]
+  4[ label="CharacterRangeTree:4\{\l  .range: \{1, 4, \"a-z\"\}\l\}\l" ]
+  5[ label="PlainCharacterTree:5\{\l  .range: \{1, 2, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  6[ label="PlainCharacterTree:6\{\l  .range: \{3, 4, \"z\"\}\l  .contents: \{'z'\}\l\}\l" ]
+  7[ label="CharacterClassTree:7\{\l  .range: \{6, 13, \"[aeiou]\"\}\l  .openingBracket: \{'['\}\l  .negated: false\l\}\l" ]
+  8[ label="CharacterClassUnionTree:8\{\l  .range: \{7, 12, \"aeiou\"\}\l\}\l" ]
+  10[ label="PlainCharacterTree:10\{\l  .range: \{7, 8, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  11[ label="PlainCharacterTree:11\{\l  .range: \{8, 9, \"e\"\}\l  .contents: \{'e'\}\l\}\l" ]
+  12[ label="PlainCharacterTree:12\{\l  .range: \{9, 10, \"i\"\}\l  .contents: \{'i'\}\l\}\l" ]
+  13[ label="PlainCharacterTree:13\{\l  .range: \{10, 11, \"o\"\}\l  .contents: \{'o'\}\l\}\l" ]
+  14[ label="PlainCharacterTree:14\{\l  .range: \{11, 12, \"u\"\}\l  .contents: \{'u'\}\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  16[ label="EndOfRegex:16\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
+  end[ label="\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
+  start[ label="\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  4 -> 5 [ label="",  taillabel="lowerBound" ]
+  4 -> 6 [ label="",  taillabel="upperBound" ]
+  2 -> 4 [ label="",  taillabel="characterClasses[0]" ]
+  8 -> 10 [ label="",  taillabel="characterClasses[0]" ]
+  8 -> 11 [ label="",  taillabel="characterClasses[1]" ]
+  8 -> 12 [ label="",  taillabel="characterClasses[2]" ]
+  8 -> 13 [ label="",  taillabel="characterClasses[3]" ]
+  8 -> 14 [ label="",  taillabel="characterClasses[4]" ]
+  7 -> 8 [ label="",  taillabel="contents" ]
+  2 -> 7 [ label="",  taillabel="characterClasses[1]" ]
+  1 -> 2 [ label="",  taillabel="contents" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 16 [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 16 [ label="",  taillabel="" ]
+  16 -> end [ label="",  taillabel="" ]
+  start -> StartState [ label="",  taillabel="" ]
+}

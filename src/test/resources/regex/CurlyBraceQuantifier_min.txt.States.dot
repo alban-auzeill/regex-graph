@@ -1,0 +1,43 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="RepetitionTree:1\{\l  .range: \{0, 5, \"a\{4,\}\"\}\l\}\l" ]
+  2[ label="PlainCharacterTree:2\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  5[ label="Branch:5\l" ]
+  4[ label="EndOfRegex:4\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
+  end[ label="\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
+  start[ label="\l" ]
+
+  // back-reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  5 -> 1 [ label="",  taillabel="possessive" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 2 [ label="",  taillabel="" ]
+  2 -> 5 [ label="",  taillabel="" ]
+  5 -> 1 [ label="",  taillabel="1" ]
+  5 -> 4 [ label="",  taillabel="2" ]
+  StartState -> 1 [ label="",  taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 4 [ label="",  taillabel="" ]
+  2 -> 5 [ label="",  taillabel="" ]
+  5 -> 4 [ label="",  taillabel="" ]
+  4 -> end [ label="",  taillabel="" ]
+  start -> StartState [ label="",  taillabel="" ]
+}

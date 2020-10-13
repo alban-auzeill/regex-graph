@@ -1,0 +1,38 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="SequenceTree:1\{\l  .range: \{0, 2, \"ab\"\}\l\}\l" ]
+  3[ label="PlainCharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  4[ label="PlainCharacterTree:4\{\l  .range: \{1, 2, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  5[ label="EndOfRegex:5\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
+  end[ label="\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
+  start[ label="\l" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 3 [ label="",  taillabel="" ]
+  3 -> 4 [ label="",  taillabel="" ]
+  4 -> 5 [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 5 [ label="",  taillabel="" ]
+  3 -> 4 [ label="",  taillabel="" ]
+  4 -> 5 [ label="",  taillabel="" ]
+  5 -> end [ label="",  taillabel="" ]
+  start -> StartState [ label="",  taillabel="" ]
+}

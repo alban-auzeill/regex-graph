@@ -1,0 +1,23 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="Pattern:1\{\l  .pattern: \"a\{4\}\"\l  .flags: 0\l  .flags0: 0\l  .compiled: true\l  .normalizedPattern: \"a\{4\}\"\l  .buffer: null\l  .predicate: null\l  .namedGroups: null\l  .groupNodes: null\l  .topClosureNodes: null\l  .localTCNCount: 0\l  .hasGroupRef: false\l  .temp: null\l  .capturingGroupCount: 1\l  .localCount: 0\l  .cursor: 4\l  .patternLength: 0\l  .hasSupplementary: false\l\}\l" ]
+  2[ label="Start:2\{\l  .minLength: 4\l\}\l" ]
+  3[ label="Curly:3\{\l  .type: GREEDY\l  .cmin: 4\l  .cmax: 4\l\}\l" ]
+  4[ label="LastNode:4\{\l\}\l" ]
+  5[ label="Node:5\{\l  .next: null\l\}\l" ]
+  6[ label="BmpCharProperty:6\{\l  .predicate:\l    $Lambda:7\{\l      .arg$1: 'a'\l    \}\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  4 -> 5 [ label="",  taillabel="next" ]
+  3 -> 4 [ label="",  taillabel="next" ]
+  6 -> 5 [ label="",  taillabel="next" ]
+  3 -> 6 [ label="",  taillabel="atom" ]
+  2 -> 3 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="root" ]
+  1 -> 3 [ label="",  taillabel="matchRoot" ]
+}

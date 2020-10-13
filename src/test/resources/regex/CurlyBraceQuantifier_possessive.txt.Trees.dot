@@ -1,0 +1,15 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="RepetitionTree:1\{\l  .range: \{0, 8, \"a\{4,12\}+\"\}\l\}\l" ]
+  2[ label="PlainCharacterTree:2\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  3[ label="CurlyBraceQuantifier:3\{\l  .range: \{1, 8, \"\{4,12\}+\"\}\l  .modifier: POSSESSIVE\l  .minimumRepetitionsToken: \{2, 3, \"4\"\}\l  .minimumRepetitions: 4\l  .commaToken: \{3, 4, \",\"\}\l  .maximumRepetitionsToken: \{4, 6, \"12\"\}\l  .maximumRepetitions: 12\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 2 [ label="",  taillabel="element" ]
+  1 -> 3 [ label="",  taillabel="quantifier" ]
+}

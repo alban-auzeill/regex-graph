@@ -1,0 +1,27 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="Pattern:1\{\l  .pattern: \"ab?c\"\l  .flags: 0\l  .flags0: 0\l  .compiled: true\l  .normalizedPattern: \"ab?c\"\l  .buffer: null\l  .predicate: null\l  .namedGroups: null\l  .groupNodes: null\l  .topClosureNodes: null\l  .localTCNCount: 0\l  .hasGroupRef: false\l  .temp: null\l  .capturingGroupCount: 1\l  .localCount: 0\l  .cursor: 4\l  .patternLength: 0\l  .hasSupplementary: false\l\}\l" ]
+  2[ label="Start:2\{\l  .minLength: 2\l\}\l" ]
+  3[ label="BmpCharProperty:3\{\l  .predicate:\l    $Lambda:11\{\l      .arg$1: 'a'\l    \}\l\}\l" ]
+  4[ label="Ques:4\{\l  .type: GREEDY\l\}\l" ]
+  5[ label="BmpCharProperty:5\{\l  .predicate:\l    $Lambda:8\{\l      .arg$1: 'c'\l    \}\l\}\l" ]
+  6[ label="LastNode:6\{\l\}\l" ]
+  7[ label="Node:7\{\l  .next: null\l\}\l" ]
+  9[ label="BmpCharProperty:9\{\l  .predicate:\l    $Lambda:10\{\l      .arg$1: 'b'\l    \}\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  6 -> 7 [ label="",  taillabel="next" ]
+  5 -> 6 [ label="",  taillabel="next" ]
+  4 -> 5 [ label="",  taillabel="next" ]
+  9 -> 7 [ label="",  taillabel="next" ]
+  4 -> 9 [ label="",  taillabel="atom" ]
+  3 -> 4 [ label="",  taillabel="next" ]
+  2 -> 3 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="root" ]
+  1 -> 3 [ label="",  taillabel="matchRoot" ]
+}

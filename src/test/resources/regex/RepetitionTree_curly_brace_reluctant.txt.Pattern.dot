@@ -1,0 +1,42 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="Pattern:1\{\l  .pattern: \"(a|b)\{7\}?c\"\l  .flags: 0\l  .flags0: 0\l  .compiled: true\l  .normalizedPattern: \"(a|b)\{7\}?c\"\l  .buffer: null\l  .predicate: null\l  .namedGroups: null\l  .groupNodes: null\l  .topClosureNodes: null\l  .localTCNCount: 0\l  .hasGroupRef: false\l  .temp: null\l  .capturingGroupCount: 2\l  .localCount: 2\l  .cursor: 10\l  .patternLength: 0\l  .hasSupplementary: false\l\}\l" ]
+  2[ label="Start:2\{\l  .minLength: 0\l\}\l" ]
+  3[ label="Prolog:3\{\l\}\l" ]
+  4[ label="Node:4\{\l  .next: null\l\}\l" ]
+  5[ label="LazyLoop:5\{\l  .countIndex: 1\l  .beginIndex: 0\l  .cmin: 7\l  .cmax: 7\l  .posIndex: -1\l\}\l" ]
+  6[ label="BmpCharProperty:6\{\l  .predicate:\l    $Lambda:8\{\l      .arg$1: 'c'\l    \}\l\}\l" ]
+  7[ label="LastNode:7\{\l\}\l" ]
+  9[ label="GroupHead:9\{\l  .localIndex: 0\l\}\l" ]
+  10[ label="Branch:10\{\l  .size: 2\l\}\l" ]
+  12[ label="BmpCharProperty:12\{\l  .predicate:\l    $Lambda:15\{\l      .arg$1: 'a'\l    \}\l\}\l" ]
+  13[ label="BranchConn:13\{\l\}\l" ]
+  14[ label="GroupTail:14\{\l  .localIndex: 0\l  .groupIndex: 2\l\}\l" ]
+  16[ label="BmpCharProperty:16\{\l  .predicate:\l    $Lambda:17\{\l      .arg$1: 'b'\l    \}\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  3 -> 4 [ label="",  taillabel="next" ]
+  7 -> 4 [ label="",  taillabel="next" ]
+  6 -> 7 [ label="",  taillabel="next" ]
+  5 -> 6 [ label="",  taillabel="next" ]
+  10 -> 4 [ label="",  taillabel="next" ]
+  14 -> 5 [ label="",  taillabel="next" ]
+  13 -> 14 [ label="",  taillabel="next" ]
+  12 -> 13 [ label="",  taillabel="next" ]
+  10 -> 12 [ label="",  taillabel="atoms[0]" ]
+  16 -> 13 [ label="",  taillabel="next" ]
+  10 -> 16 [ label="",  taillabel="atoms[1]" ]
+  10 -> 13 [ label="",  taillabel="conn" ]
+  9 -> 10 [ label="",  taillabel="next" ]
+  9 -> 14 [ label="",  taillabel="tail" ]
+  5 -> 9 [ label="",  taillabel="body" ]
+  3 -> 5 [ label="",  taillabel="loop" ]
+  2 -> 3 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="root" ]
+  1 -> 3 [ label="",  taillabel="matchRoot" ]
+}

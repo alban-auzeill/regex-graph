@@ -1,0 +1,50 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="SequenceTree:1\{\l  .range: \{0, 6, \"b(?=a)\"\}\l\}\l" ]
+  3[ label="PlainCharacterTree:3\{\l  .range: \{0, 1, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+  4[ label="LookAroundTree:4\{\l  .range: \{1, 6, \"(?=a)\"\}\l  .kind: LOOK_AROUND\l  .groupHeader: \{1, 4, \"(?=\"\}\l  .polarity: POSITIVE\l  .direction: AHEAD\l\}\l" ]
+  5[ label="PlainCharacterTree:5\{\l  .range: \{4, 5, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  7[ label="EndOfLookAround:7\l  continuation: null\l" ]
+  6[ label="EndOfRegex:6\l  continuation: null\l" ]
+  StartState[ label="StartState\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
+  end[ label="\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
+  start[ label="\l" ]
+
+  // back-reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  7 -> 4 [ label="",  taillabel="parent" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 3 [ label="",  taillabel="" ]
+  3 -> 4 [ label="",  taillabel="" ]
+  4 -> 5 [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
+
+  // backtracking-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="icurvevee", arrowtail="none", dir="both"]
+  5 -> 7 [ label="",  taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 6 [ label="",  taillabel="" ]
+  3 -> 4 [ label="",  taillabel="" ]
+  4 -> 6 [ label="",  taillabel="" ]
+  5 -> 7 [ label="",  taillabel="" ]
+  7 -> 6 [ label="",  taillabel="" ]
+  6 -> end [ label="",  taillabel="" ]
+  start -> StartState [ label="",  taillabel="" ]
+}

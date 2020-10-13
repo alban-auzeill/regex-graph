@@ -1,0 +1,8 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="11"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="MiscEscapeSequenceTree:1\{\l  .range: \{0, 14, \"\\\\N\{PLUS SIGN\}\"\}\l\}\l" ]
+}

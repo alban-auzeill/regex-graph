@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.provider.Arguments;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.fail;
 
 public abstract class AbstractTestOnTextFiles {
 
@@ -47,6 +48,12 @@ public abstract class AbstractTestOnTextFiles {
   static void autoFixExpectedFileIfNeeded(Path expectedFile, String content) throws IOException {
     if ("true".equals(System.getProperty("fixTest"))) {
       Files.writeString(expectedFile, content, UTF_8);
+    }
+    if (!expectedFile.getFileName().toString().contains("error")) {
+      String lowerCaseContent = content.toLowerCase();
+      if (lowerCaseContent.contains("error") || lowerCaseContent.contains("exception")) {
+        fail("Unexpected error in file '" + expectedFile + "' content:\n\n" + content);
+      }
     }
   }
 
