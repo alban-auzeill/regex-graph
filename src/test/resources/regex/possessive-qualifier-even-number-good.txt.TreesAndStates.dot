@@ -78,5 +78,6 @@ digraph G {
   17 -> 15 [ label="",  taillabel="" ]
   7 -> 17 [ label="",  taillabel="" ]
   15 -> end [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
   start -> StartState [ label="",  taillabel="" ]
 }

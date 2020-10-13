@@ -37,5 +37,6 @@ digraph G {
   4 -> 5 [ label="",  taillabel="" ]
   5 -> 6 [ label="",  taillabel="" ]
   6 -> end [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
   start -> StartState [ label="",  taillabel="" ]
 }
