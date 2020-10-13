@@ -24,10 +24,6 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
   start[ label="\l" ]
 
-  // back-reference edges
-  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  9 -> 3 [ label="",  taillabel="possessive" ]
-
   // successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 3 [ label="",  taillabel="" ]

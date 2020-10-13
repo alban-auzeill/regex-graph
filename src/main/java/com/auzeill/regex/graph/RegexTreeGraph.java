@@ -447,15 +447,17 @@ public class RegexTreeGraph extends GraphWriter {
     public void visitRepetition(RepetitionTree tree) {
       markVisited(tree);
       if (tree.getElement() != null) {
+        Quantifier.Modifier modifier = tree.getQuantifier().getModifier();
         String treeReference = context.getNodeReference(tree);
         String elementReference = context.getNodeReference(tree.getElement());
         String endNodeReference = context.createReference();
         context.add(new Node(endNodeReference, "Branch:" + endNodeReference, "state"));
-        context.add(new Edge(endNodeReference, treeReference, "possessive", "back-reference"));
+        if (modifier == Quantifier.Modifier.POSSESSIVE) {
+          context.add(new Edge(endNodeReference, treeReference, "possessive", "back-reference"));
+        }
         List<String> endNodeSuccessors = new ArrayList<>();
         boolean noLoop = tree.getQuantifier().getMaximumRepetitions() != null &&
           tree.getQuantifier().getMaximumRepetitions() <= 1;
-        Quantifier.Modifier modifier = tree.getQuantifier().getModifier();
         if (noLoop) {
           endNodeSuccessors.addAll(getSuccessors(tree));
         } else {

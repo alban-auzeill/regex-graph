@@ -40,10 +40,6 @@ digraph G {
   1 -> 3 [ label="",  taillabel="items[0]" ]
   1 -> 11 [ label="",  taillabel="items[1]" ]
 
-  // back-reference edges
-  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  13 -> 3 [ label="",  taillabel="possessive" ]
-
   // successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   11 -> 12 [ label="",  taillabel="" ]
