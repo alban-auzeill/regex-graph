@@ -252,7 +252,9 @@ public class RegexTreeGraph extends GraphWriter {
         context.add(new Node("end", "", "end"));
         context.add(new Edge(endOfRegexReference, "end", "", "continuation"));
         context.add(new Node("StartState", "StartState", "state"));
-        context.add(new Edge("StartState", context.getNodeReference(firstNode), "", "successor"));
+
+        String firstNodeReference = context.getNodeReference(firstNode);
+        context.add(new Edge("StartState", firstNodeReference, "", continuationHeadType.getOrDefault(firstNodeReference, "successor")));
         context.add(new Node("start", "", "start"));
         context.add(new Edge("start", "StartState", "", "continuation"));
       }
