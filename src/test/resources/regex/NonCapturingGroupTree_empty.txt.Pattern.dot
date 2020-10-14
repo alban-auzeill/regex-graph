@@ -1,6 +1,8 @@
 digraph G {
   rankdir=LR;
-  graph [fontname="Monospace", fontsize="11"]
+  labelloc="t";
+  label="\"(?i)a\" Pattern\l";
+  graph [fontname="Monospace", fontsize="13"]
 
   // default nodes
   node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]

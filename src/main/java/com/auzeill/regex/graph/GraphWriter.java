@@ -31,14 +31,14 @@ public class GraphWriter {
     return "default";
   }
 
-  String graph(Object object) {
+  String graph(Object object, String title) {
     GraphContext savedContext = context;
     context = new GraphContext();
     write(object);
     extendsContext(object, context);
     StringBuilder out = new StringBuilder();
     out.append("digraph G {").append(NL);
-    writeGraphStyle(out);
+    writeGraphStyle(out, title);
 
     context.nodes().stream()
       .collect(Collectors.groupingBy(node -> node.type, LinkedHashMap::new, Collectors.toList()))
@@ -71,9 +71,13 @@ public class GraphWriter {
     // can be overridden
   }
 
-  void writeGraphStyle(StringBuilder out) {
+  void writeGraphStyle(StringBuilder out, String title) {
     out.append(INDENTATION).append("rankdir=LR;").append(NL);
-    out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\"]").append(NL);
+    if (title != null) {
+      out.append(INDENTATION).append("labelloc=\"t\";").append(NL);
+      out.append(INDENTATION).append("label=").append(writeLeftAlignDotLabel(title)).append(";").append(NL);
+    }
+    out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"13\"]").append(NL);
   }
 
   void writeNodesStyle(StringBuilder out, String nodeType) {

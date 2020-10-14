@@ -68,17 +68,28 @@ public class RegexTreeGraph extends GraphWriter {
       result = parser.parse();
     }
     RegexTreeGraph writer = new RegexTreeGraph(result, includeTrees, includeStates, onlyLegend);
-    return writer.graph(result != null ? result.getResult() : null);
+    String title = stringLiteral;
+    if (includeTrees && includeStates) {
+      title += " AST & States";
+    } else if (includeTrees) {
+      title += " AST";
+    } else if (includeStates) {
+      title += " States";
+    }
+    return writer.graph(result != null ? result.getResult() : null, title);
   }
 
   @Override
-  void writeGraphStyle(StringBuilder out) {
+  void writeGraphStyle(StringBuilder out, String title) {
+    out.append(INDENTATION).append("rankdir=LR;").append(NL);
     if (onlyLegend) {
-      out.append(INDENTATION).append("rankdir=LR;").append(NL);
       out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\", pad=\"0.01\", nodesep=\"0.01\", ranksep=\"0.01\"]").append(NL);
     } else {
-      out.append(INDENTATION).append("rankdir=LR;").append(NL);
-      out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\", pad=\"0.3\"]").append(NL);
+      out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"13\", pad=\"0.3\"]").append(NL);
+      if (title != null) {
+        out.append(INDENTATION).append("labelloc=\"t\";").append(NL);
+        out.append(INDENTATION).append("label=").append(writeCenteredDotLabel(title)).append(";").append(NL);
+      }
     }
   }
 

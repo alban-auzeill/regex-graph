@@ -1,4 +1,4 @@
 digraph G {
   rankdir=LR;
-  graph [fontname="Monospace", fontsize="11"]
+  graph [fontname="Monospace", fontsize="13"]
 }

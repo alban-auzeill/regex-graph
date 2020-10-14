@@ -1,0 +1,17 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="13", pad="0.3"]
+  labelloc="t";
+  label="\"a|b\" AST";
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="DisjunctionTree:1\{\l  .range: \{0, 3, \"a|b\"\}\l  .orOperators: :5[ \{'|'\} ]\l\}\l" ]
+  3[ label="PlainCharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  4[ label="PlainCharacterTree:4\{\l  .range: \{2, 3, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 3 [ label="",  taillabel="alternatives[0]" ]
+  1 -> 4 [ label="",  taillabel="alternatives[1]" ]
+}

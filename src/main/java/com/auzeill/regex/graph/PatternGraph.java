@@ -18,7 +18,7 @@ public class PatternGraph extends GraphWriter {
     } catch (Exception e) {
       compiled = Collections.singleton(new DirectValue(e.getClass().getSimpleName() + ":\n" + e.getMessage()));
     }
-    return writer.graph(compiled);
+    return writer.graph(compiled, stringLiteral + " Pattern");
   }
 
   @Override

@@ -1,6 +1,8 @@
 digraph G {
   rankdir=LR;
-  graph [fontname="Monospace", fontsize="11", pad="0.3"]
+  graph [fontname="Monospace", fontsize="13", pad="0.3"]
+  labelloc="t";
+  label="\"a(\" States";
 
   // end nodes
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]

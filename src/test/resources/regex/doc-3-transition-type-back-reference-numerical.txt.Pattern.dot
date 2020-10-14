@@ -1,0 +1,29 @@
+digraph G {
+  rankdir=LR;
+  labelloc="t";
+  label="\"(a)\\\\1\" Pattern\l";
+  graph [fontname="Monospace", fontsize="13"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="Pattern:1\{\l  .pattern: \"(a)\\\\1\"\l  .flags: 0\l  .flags0: 0\l  .compiled: true\l  .normalizedPattern: \"(a)\\\\1\"\l  .buffer: null\l  .predicate: null\l  .namedGroups: null\l  .groupNodes: null\l  .topClosureNodes: null\l  .localTCNCount: 0\l  .hasGroupRef: true\l  .temp: null\l  .capturingGroupCount: 2\l  .localCount: 1\l  .cursor: 5\l  .patternLength: 0\l  .hasSupplementary: false\l\}\l" ]
+  2[ label="Start:2\{\l  .minLength: 1\l\}\l" ]
+  3[ label="GroupHead:3\{\l  .localIndex: 0\l\}\l" ]
+  4[ label="BmpCharProperty:4\{\l  .predicate:\l    $Lambda:9\{\l      .arg$1: 'a'\l    \}\l\}\l" ]
+  5[ label="GroupTail:5\{\l  .localIndex: 0\l  .groupIndex: 2\l\}\l" ]
+  6[ label="BackRef:6\{\l  .groupIndex: 2\l\}\l" ]
+  7[ label="LastNode:7\{\l\}\l" ]
+  8[ label="Node:8\{\l  .next: null\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  7 -> 8 [ label="",  taillabel="next" ]
+  6 -> 7 [ label="",  taillabel="next" ]
+  5 -> 6 [ label="",  taillabel="next" ]
+  4 -> 5 [ label="",  taillabel="next" ]
+  3 -> 4 [ label="",  taillabel="next" ]
+  3 -> 5 [ label="",  taillabel="tail" ]
+  2 -> 3 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="root" ]
+  1 -> 3 [ label="",  taillabel="matchRoot" ]
+}

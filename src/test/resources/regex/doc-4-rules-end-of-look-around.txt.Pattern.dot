@@ -1,0 +1,32 @@
+digraph G {
+  rankdir=LR;
+  labelloc="t";
+  label="\"(?=0)\\\\d\" Pattern\l";
+  graph [fontname="Monospace", fontsize="13"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="Pattern:1\{\l  .pattern: \"(?=0)\\\\d\"\l  .flags: 0\l  .flags0: 0\l  .compiled: true\l  .normalizedPattern: \"(?=0)\\\\d\"\l  .buffer: null\l  .predicate: \{7\}\l  .namedGroups: null\l  .groupNodes: null\l  .topClosureNodes: null\l  .localTCNCount: 0\l  .hasGroupRef: false\l  .temp: null\l  .capturingGroupCount: 1\l  .localCount: 1\l  .cursor: 7\l  .patternLength: 0\l  .hasSupplementary: false\l\}\l" ]
+  2[ label="Start:2\{\l  .minLength: 1\l\}\l" ]
+  3[ label="Pos:3\{\l\}\l" ]
+  4[ label="BmpCharProperty:4\{\l  .predicate: CharPredicates$$Lambda:7\{ \}\l\}\l" ]
+  5[ label="LastNode:5\{\l\}\l" ]
+  6[ label="Node:6\{\l  .next: null\l\}\l" ]
+  8[ label="GroupHead:8\{\l  .localIndex: 0\l\}\l" ]
+  9[ label="BmpCharProperty:9\{\l  .predicate:\l    $Lambda:11\{\l      .arg$1: '0'\l    \}\l\}\l" ]
+  10[ label="GroupTail:10\{\l  .localIndex: 0\l  .groupIndex: 0\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  5 -> 6 [ label="",  taillabel="next" ]
+  4 -> 5 [ label="",  taillabel="next" ]
+  3 -> 4 [ label="",  taillabel="next" ]
+  10 -> 6 [ label="",  taillabel="next" ]
+  9 -> 10 [ label="",  taillabel="next" ]
+  8 -> 9 [ label="",  taillabel="next" ]
+  8 -> 10 [ label="",  taillabel="tail" ]
+  3 -> 8 [ label="",  taillabel="cond" ]
+  2 -> 3 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="root" ]
+  1 -> 3 [ label="",  taillabel="matchRoot" ]
+}

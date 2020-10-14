@@ -239,7 +239,7 @@ class GraphWriterTest {
 
   @Test
   void graph_null() throws IOException {
-    String actual = writer.graph(null);
+    String actual = writer.graph(null, null);
     Path dotFile = expectedFile("graph_null.dot");
     autoFixExpectedFileIfNeeded(dotFile, actual);
     assertThat(actual).isEqualTo(readFile(dotFile));
@@ -248,7 +248,7 @@ class GraphWriterTest {
   @Test
   void graph_one_node() throws IOException {
     A a = new A(32, -2);
-    String actual = writer.graph(new B(a, 0, a));
+    String actual = writer.graph(new B(a, 0, a), "one node");
     Path dotFile = expectedFile("graph_one_node.dot");
     autoFixExpectedFileIfNeeded(dotFile, actual);
     assertThat(actual).isEqualTo(readFile(dotFile));
@@ -267,7 +267,7 @@ class GraphWriterTest {
     o4.previous = o2;
     B o1 = new B(o2, 0, o2);
 
-    String actual = writer.graph(o1);
+    String actual = writer.graph(o1, null);
     Path dotFile = expectedFile("graph_several_nodes.dot");
     autoFixExpectedFileIfNeeded(dotFile, actual);
     assertThat(actual).isEqualTo(readFile(dotFile));
@@ -291,7 +291,7 @@ class GraphWriterTest {
     o1.previous = o2;
     o1.next = o3;
 
-    String actual = writer.graph(o1);
+    String actual = writer.graph(o1, null);
     Path dotFile = expectedFile("graph_array_list.dot");
     autoFixExpectedFileIfNeeded(dotFile, actual);
     assertThat(actual).isEqualTo(readFile(dotFile));

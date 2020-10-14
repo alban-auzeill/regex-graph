@@ -1,0 +1,51 @@
+digraph G {
+  rankdir=LR;
+  graph [fontname="Monospace", fontsize="13", pad="0.3"]
+  labelloc="t";
+  label="\"\\\\d*+\" AST & States";
+
+  // tree-and-state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
+  1[ label="RepetitionTree:1\{\l  .range: \{0, 5, \"\\\\d*+\"\}\l\}\l" ]
+  2[ label="EscapedCharacterClassTree:2\{\l  .range: \{0, 3, \"\\\\d\"\}\l  .type: 'd'\l  .property: null\l\}\l" ]
+
+  // default nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
+  3[ label="SimpleQuantifier:3\{\l  .range: \{3, 5, \"*+\"\}\l  .modifier: POSSESSIVE\l  .kind: STAR\l\}\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  4[ label="Commit:4\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
+  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
+
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
+  StartState[ label="StartState\l\l\l\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 2 [ label="",  taillabel="element" ]
+  1 -> 3 [ label="",  taillabel="quantifier" ]
+
+  // back-reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  4 -> 1 [ label="",  taillabel="rollback" ]
+
+  // successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> 2 [ label="",  taillabel="1" ]
+  1 -> 4 [ label="",  taillabel="2" ]
+  2 -> 1 [ label="",  taillabel="" ]
+  4 -> EndOfRegex [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
+
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> EndOfRegex [ label="",  taillabel="" ]
+  2 -> 4 [ label="",  taillabel="" ]
+  4 -> EndOfRegex [ label="",  taillabel="" ]
+  StartState -> 1 [ label="",  taillabel="" ]
+}

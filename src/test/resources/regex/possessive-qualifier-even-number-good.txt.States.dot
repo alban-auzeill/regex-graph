@@ -1,6 +1,8 @@
 digraph G {
   rankdir=LR;
-  graph [fontname="Monospace", fontsize="11", pad="0.3"]
+  graph [fontname="Monospace", fontsize="13", pad="0.3"]
+  labelloc="t";
+  label="\"\\\\d*+(?<=[02468])\" States";
 
   // tree-and-state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]

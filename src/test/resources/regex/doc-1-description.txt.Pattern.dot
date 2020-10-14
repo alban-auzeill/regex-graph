@@ -1,0 +1,31 @@
+digraph G {
+  rankdir=LR;
+  labelloc="t";
+  label="\"a|b\" Pattern\l";
+  graph [fontname="Monospace", fontsize="13"]
+
+  // default nodes
+  node [fontname="Monospace", fontsize="9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige"]
+  1[ label="Pattern:1\{\l  .pattern: \"a|b\"\l  .flags: 0\l  .flags0: 0\l  .compiled: true\l  .normalizedPattern: \"a|b\"\l  .buffer: null\l  .predicate: null\l  .namedGroups: null\l  .groupNodes: null\l  .topClosureNodes: null\l  .localTCNCount: 0\l  .hasGroupRef: false\l  .temp: null\l  .capturingGroupCount: 1\l  .localCount: 0\l  .cursor: 3\l  .patternLength: 0\l  .hasSupplementary: false\l\}\l" ]
+  2[ label="Start:2\{\l  .minLength: 1\l\}\l" ]
+  3[ label="Branch:3\{\l  .size: 2\l\}\l" ]
+  4[ label="Node:4\{\l  .next: null\l\}\l" ]
+  6[ label="BmpCharProperty:6\{\l  .predicate:\l    $Lambda:9\{\l      .arg$1: 'a'\l    \}\l\}\l" ]
+  7[ label="BranchConn:7\{\l\}\l" ]
+  8[ label="LastNode:8\{\l\}\l" ]
+  10[ label="BmpCharProperty:10\{\l  .predicate:\l    $Lambda:11\{\l      .arg$1: 'b'\l    \}\l\}\l" ]
+
+  // default edges
+  edge [fontname="Monospace", fontsize="9", color="Navy"]
+  3 -> 4 [ label="",  taillabel="next" ]
+  8 -> 4 [ label="",  taillabel="next" ]
+  7 -> 8 [ label="",  taillabel="next" ]
+  6 -> 7 [ label="",  taillabel="next" ]
+  3 -> 6 [ label="",  taillabel="atoms[0]" ]
+  10 -> 7 [ label="",  taillabel="next" ]
+  3 -> 10 [ label="",  taillabel="atoms[1]" ]
+  3 -> 7 [ label="",  taillabel="conn" ]
+  2 -> 3 [ label="",  taillabel="next" ]
+  1 -> 2 [ label="",  taillabel="root" ]
+  1 -> 3 [ label="",  taillabel="matchRoot" ]
+}
