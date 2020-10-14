@@ -1,6 +1,6 @@
 digraph G {
   rankdir=LR;
-  graph [fontname="Monospace", fontsize="11"]
+  graph [fontname="Monospace", fontsize="11", pad="0.3"]
 
   // tree-and-state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
@@ -11,18 +11,13 @@ digraph G {
   7[ label="PlainCharacterTree:7\{\l  .range: \{9, 10, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
   9[ label="BackReferenceTree:9\{\l  .range: \{11, 19, \"\\\\k<foo>\"\}\l  .groupName: \"foo\"\l  .key: \{'k'\}\l\}\l" ]
 
-  // state nodes
-  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
-  10[ label="EndOfRegex:10\l  continuation: null\l" ]
-  StartState[ label="StartState\l" ]
-
   // end nodes
-  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
-  end[ label="\l" ]
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
+  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
   // start nodes
-  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
-  start[ label="\l" ]
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
+  StartState[ label="StartState\l\l\l\l" ]
 
   // back-reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
@@ -36,18 +31,16 @@ digraph G {
   4 -> 7 [ label="",  taillabel="2" ]
   6 -> 9 [ label="",  taillabel="" ]
   7 -> 9 [ label="",  taillabel="" ]
-  9 -> 10 [ label="",  taillabel="" ]
+  9 -> EndOfRegex [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> 10 [ label="",  taillabel="" ]
+  1 -> EndOfRegex [ label="",  taillabel="" ]
   3 -> 9 [ label="",  taillabel="" ]
   4 -> 9 [ label="",  taillabel="" ]
   6 -> 9 [ label="",  taillabel="" ]
   7 -> 9 [ label="",  taillabel="" ]
-  9 -> 10 [ label="",  taillabel="" ]
-  10 -> end [ label="",  taillabel="" ]
+  9 -> EndOfRegex [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
-  start -> StartState [ label="",  taillabel="" ]
 }

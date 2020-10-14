@@ -1,6 +1,6 @@
 digraph G {
   rankdir=LR;
-  graph [fontname="Monospace", fontsize="11"]
+  graph [fontname="Monospace", fontsize="11", pad="0.3"]
 
   // tree-and-state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
@@ -11,21 +11,19 @@ digraph G {
 
   // state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
-  7[ label="EndOfLookAround:7\l  continuation: null\l" ]
-  6[ label="EndOfRegex:6\l  continuation: null\l" ]
-  StartState[ label="StartState\l" ]
+  6[ label="EndOfLookAround:6\l  continuation: null\l" ]
 
   // end nodes
-  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.12"]
-  end[ label="\l" ]
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
+  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
   // start nodes
-  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="DodgerBlue", fillcolor="DodgerBlue", fixedsize="true", width="0.20"]
-  start[ label="\l" ]
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
+  StartState[ label="StartState\l\l\l\l" ]
 
   // back-reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  7 -> 4 [ label="",  taillabel="parent" ]
+  6 -> 4 [ label="",  taillabel="parent" ]
 
   // successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
@@ -36,16 +34,14 @@ digraph G {
 
   // backtracking-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="icurvevee", arrowtail="none", dir="both"]
-  5 -> 7 [ label="",  taillabel="" ]
+  5 -> 6 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> 6 [ label="",  taillabel="" ]
+  1 -> EndOfRegex [ label="",  taillabel="" ]
   3 -> 4 [ label="",  taillabel="" ]
-  4 -> 6 [ label="",  taillabel="" ]
-  5 -> 7 [ label="",  taillabel="" ]
-  7 -> 6 [ label="",  taillabel="" ]
-  6 -> end [ label="",  taillabel="" ]
+  4 -> EndOfRegex [ label="",  taillabel="" ]
+  5 -> 6 [ label="",  taillabel="" ]
+  6 -> EndOfRegex [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
-  start -> StartState [ label="",  taillabel="" ]
 }

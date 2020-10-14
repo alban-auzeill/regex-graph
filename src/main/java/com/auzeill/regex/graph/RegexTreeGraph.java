@@ -78,7 +78,7 @@ public class RegexTreeGraph extends GraphWriter {
       out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\", pad=\"0.01\", nodesep=\"0.01\", ranksep=\"0.01\"]").append(NL);
     } else {
       out.append(INDENTATION).append("rankdir=LR;").append(NL);
-      out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\"]").append(NL);
+      out.append(INDENTATION).append("graph [fontname=\"Monospace\", fontsize=\"11\", pad=\"0.3\"]").append(NL);
     }
   }
 
@@ -105,15 +105,15 @@ public class RegexTreeGraph extends GraphWriter {
         break;
       case "start":
         shape = "circle";
-        color = "DodgerBlue";
-        fillColor = "DodgerBlue";
+        color = "#7070E0";
+        fillColor = "#7070E0";
         fixedSize="true";
         width="0.20";
         break;
       case "end":
         shape = "doublecircle";
-        color = "DodgerBlue";
-        fillColor = "DodgerBlue";
+        color = "#7070E0";
+        fillColor = "#7070E0";
         fixedSize="true";
         width="0.12";
         break;
@@ -235,7 +235,7 @@ public class RegexTreeGraph extends GraphWriter {
     public void visit(RegexParseResult regexParseResult) {
       if (!context.nodes().isEmpty()) {
         RegexTree firstNode = regexParseResult.getResult();
-        String endOfRegexReference = context.createReference();
+        String endOfRegexReference = "EndOfRegex";
         setSuccessor(firstNode, endOfRegexReference);
         setContinuation(firstNode, endOfRegexReference);
 
@@ -243,20 +243,16 @@ public class RegexTreeGraph extends GraphWriter {
 
         linkBackReferenceToCapturingGroup();
 
-        context.add(new Node(endOfRegexReference, "EndOfRegex:" + endOfRegexReference + "\n  continuation: null\n", "state"));
+        context.add(new Node(endOfRegexReference, "EndOfRegex\n\n\n\n", "end"));
 
         successorMap.forEach(this::createSuccessorEdges);
         continuationMap.forEach(this::createContinuationEdge);
 
-        context.add(new Node("end", "", "end"));
-        context.add(new Edge(endOfRegexReference, "end", "", "continuation"));
-        context.add(new Node("StartState", "StartState", "state"));
+        context.add(new Node("StartState", "StartState\n\n\n\n", "start"));
 
         String firstNodeReference = context.getNodeReference(firstNode);
         context.add(new Edge("StartState", firstNodeReference, "", continuationHeadType.getOrDefault(firstNodeReference, "successor")));
         context.add(new Edge("StartState", firstNodeReference, "", "continuation"));
-        context.add(new Node("start", "", "start"));
-        context.add(new Edge("start", "StartState", "", "continuation"));
       }
     }
 

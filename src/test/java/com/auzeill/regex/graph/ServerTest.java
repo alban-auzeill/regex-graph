@@ -77,7 +77,7 @@ class ServerTest {
     assertThat(response.body())
       .contains("<svg").contains("</svg>")
       .contains("CharacterClassTree:1{")
-      .contains("EndOfRegex:");
+      .contains("EndOfRegex");
   }
 
   @Test
@@ -87,7 +87,7 @@ class ServerTest {
     assertThat(response.body())
       .contains("digraph G {")
       .contains("CharacterClassTree:1\\{")
-      .contains("EndOfRegex:");
+      .contains("EndOfRegex");
   }
 
   @Test
@@ -97,7 +97,7 @@ class ServerTest {
     assertThat(response.body())
       .contains("<svg").contains("</svg>")
       .contains("CharacterClassTree:1{")
-      .doesNotContain("EndOfRegex:");
+      .doesNotContain("EndOfRegex");
   }
 
   @Test
@@ -107,7 +107,7 @@ class ServerTest {
     assertThat(response.body())
       .contains("digraph G {")
       .contains("CharacterClassTree:1\\{")
-      .doesNotContain("EndOfRegex:");
+      .doesNotContain("EndOfRegex");
   }
 
   @Test
