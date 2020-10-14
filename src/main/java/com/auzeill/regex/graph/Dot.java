@@ -10,13 +10,17 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Dot {
 
-  public static byte[] generateSVG(String dot) throws IOException, InterruptedException {
+  enum Type {
+    SVG,
+    PNG
+  }
+  public static byte[] generate(String dot, Type type) throws IOException, InterruptedException {
     Path dotFile = Files.createTempFile("graph", ".dot").toRealPath();
     Files.writeString(dotFile, dot, UTF_8);
 
     Path svgFile = Files.createTempFile("graph", ".svg").toRealPath();
 
-    String[] args = {dotPath(), "-Tsvg", "-o", svgFile.toString(), dotFile.toString()};
+    String[] args = {dotPath(), "-T" + type.name().toLowerCase(), "-o", svgFile.toString(), dotFile.toString()};
     Process dotProcess = Runtime.getRuntime().exec(args);
     dotProcess.waitFor();
 

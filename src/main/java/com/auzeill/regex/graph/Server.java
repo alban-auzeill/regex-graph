@@ -54,7 +54,7 @@ public class Server extends NanoHTTPD {
               String html = "<pre>\n" + dot.replace("&", "&amp;").replace("<", "&lt;") + "</pre>\n";
               return newFixedLengthResponse(Response.Status.OK, NanoHTTPD.MIME_HTML, html);
             }
-            byte[] svg = Dot.generateSVG(dot);
+            byte[] svg = Dot.generate(dot, Dot.Type.SVG);
             return newFixedLengthResponse(Response.Status.OK, "image/svg+xml", new ByteArrayInputStream(svg), svg.length);
           } catch (Exception e) {
             byte[] svg = ("<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"500\" width=\"1024\">" +

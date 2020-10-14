@@ -10,10 +10,10 @@ class DotTest {
 
   @Test
   void execute_dot() throws IOException, InterruptedException {
-    byte[] svg = Dot.generateSVG("" +
+    byte[] svg = Dot.generate("" +
       "digraph D {\n" +
       "  A -> B\n" +
-      "}");
+      "}", Dot.Type.SVG);
     assertThat(new String(svg, UTF_8)).contains("<svg").contains("</svg>");
   }
 

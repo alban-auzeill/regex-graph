@@ -30,21 +30,6 @@ public abstract class AbstractTestOnTextFiles {
     return arguments.stream();
   }
 
-  static String readQuotedStringLiteral(Path txtFile) throws IOException {
-    String literal = readFile(txtFile);
-    literal = literal
-      .replaceFirst("^\\s++", "")
-      .replaceFirst("\\s++$", "");
-    if (!literal.startsWith("\"") || !literal.endsWith("\"")) {
-      throw new IllegalStateException("Missing double quote around: " + literal);
-    }
-    return literal;
-  }
-
-  static String readFile(Path file) throws IOException {
-    return Files.readString(file, UTF_8);
-  }
-
   static void autoFixExpectedFileIfNeeded(Path expectedFile, String content) throws IOException {
     if ("true".equals(System.getProperty("fixTest"))) {
       Files.writeString(expectedFile, content, UTF_8);

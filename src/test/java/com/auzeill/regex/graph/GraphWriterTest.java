@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import static com.auzeill.regex.graph.AbstractTestOnTextFiles.autoFixExpectedFileIfNeeded;
-import static com.auzeill.regex.graph.AbstractTestOnTextFiles.readFile;
+import static com.auzeill.regex.graph.FileUtils.readFile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GraphWriterTest {
