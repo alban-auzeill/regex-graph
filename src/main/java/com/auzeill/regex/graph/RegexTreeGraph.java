@@ -4,7 +4,6 @@ import com.auzeill.regex.graph.GraphContext.Edge;
 import com.auzeill.regex.graph.GraphContext.Node;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -447,46 +446,91 @@ public class RegexTreeGraph extends GraphWriter {
     public void visitRepetition(RepetitionTree tree) {
       markVisited(tree);
       if (tree.getElement() != null) {
-        Quantifier.Modifier modifier = tree.getQuantifier().getModifier();
         String treeReference = context.getNodeReference(tree);
         String elementReference = context.getNodeReference(tree.getElement());
-        String endNodeReference = context.createReference();
-        context.add(new Node(endNodeReference, "Branch:" + endNodeReference, "state"));
+
+        List<String> repetitionSuccessors = getSuccessors(tree);
+        List<String> successors = repetitionSuccessors;
+        String continuation = getContinuation(tree);
+
+        // "Commit" node
+        Quantifier.Modifier modifier = tree.getQuantifier().getModifier();
         if (modifier == Quantifier.Modifier.POSSESSIVE) {
-          context.add(new Edge(endNodeReference, treeReference, "possessive", "back-reference"));
+          String commitReference = context.createReference();
+          context.add(new Node(commitReference, "Commit:" + commitReference, "state"));
+          context.add(new Edge(commitReference, treeReference, "rollback", "back-reference"));
+          successorMap.put(commitReference, successors);
+          continuationMap.put(commitReference, continuation);
+          repetitionSuccessors = Collections.singletonList(commitReference);
+          successors = repetitionSuccessors;
+          continuation = commitReference;
         }
-        List<String> endNodeSuccessors = new ArrayList<>();
-        boolean noLoop = tree.getQuantifier().getMaximumRepetitions() != null &&
-          tree.getQuantifier().getMaximumRepetitions() <= 1;
-        if (noLoop) {
-          endNodeSuccessors.addAll(getSuccessors(tree));
-        } else {
-          if (tree.getQuantifier().getMinimumRepetitions() > 0) {
-            endNodeSuccessors.addAll(getSuccessors(tree));
-          }
-          if (modifier == Quantifier.Modifier.RELUCTANT) {
-            endNodeSuccessors.add(treeReference);
-          } else if (modifier == Quantifier.Modifier.POSSESSIVE) {
-            endNodeSuccessors.add(0, treeReference);
-          } else { // GREEDY
-            endNodeSuccessors.add(0, treeReference);
-          }
-        }
-        if (tree.getQuantifier().getMinimumRepetitions() == 0) {
-          if (modifier == Quantifier.Modifier.RELUCTANT) {
-            successorMap.put(treeReference, Arrays.asList(getContinuation(tree), elementReference));
+
+        boolean isOptional = tree.getQuantifier().getMinimumRepetitions() == 0;
+        boolean hasLoop = tree.getQuantifier().getMaximumRepetitions() == null ||
+          tree.getQuantifier().getMaximumRepetitions() > 1;
+        boolean hasOnlyZeroRepetition = tree.getQuantifier().getMaximumRepetitions() != null &&
+          tree.getQuantifier().getMaximumRepetitions() == 0;
+
+        boolean needBranch = false;
+        if (hasLoop) {
+          if (isOptional) {
+            successors = Collections.singletonList(treeReference);
           } else {
-            successorMap.put(treeReference, Arrays.asList(elementReference, getContinuation(tree)));
+            needBranch = true;
+            if (modifier == Quantifier.Modifier.RELUCTANT) {
+              successors = concat(successors, treeReference);
+            } else { // GREEDY and POSSESSIVE
+              successors = concat(treeReference, successors);
+            }
+          }
+        }
+
+        // branch successors and continuation
+        if (needBranch) {
+          String branchReference = context.createReference();
+          context.add(new Node(branchReference, "Branch:" + branchReference, "state"));
+          successorMap.put(branchReference, successors);
+          continuationMap.put(branchReference, continuation);
+          successors = Collections.singletonList(branchReference);
+          continuation = branchReference;
+        }
+
+        // element successors and continuation
+        if (!hasOnlyZeroRepetition) {
+          successorMap.put(elementReference, successors);
+          continuationMap.put(elementReference, continuation);
+        }
+
+        // tree successors
+        if (isOptional) {
+          if (hasOnlyZeroRepetition) {
+            successorMap.put(treeReference, repetitionSuccessors);
+          } else if (modifier == Quantifier.Modifier.RELUCTANT) {
+            successorMap.put(treeReference, concat(repetitionSuccessors, elementReference));
+          } else {
+            successorMap.put(treeReference, concat(elementReference, repetitionSuccessors));
           }
         } else {
           successorMap.put(treeReference, Collections.singletonList(elementReference));
         }
-        successorMap.put(elementReference, Collections.singletonList(endNodeReference));
-        successorMap.put(endNodeReference, endNodeSuccessors);
-        continuationMap.put(elementReference, endNodeReference);
-        continuationMap.put(endNodeReference, getContinuation(tree));
+        if (!hasOnlyZeroRepetition) {
+          super.visitRepetition(tree);
+        }
       }
-      super.visitRepetition(tree);
+    }
+
+    public <T> List<T> concat(List<T> list, T elem) {
+      List<T> result = new ArrayList<>(list);
+      result.add(elem);
+      return result;
+    }
+
+    public <T> List<T> concat(T elem, List<T> list) {
+      List<T> result = new ArrayList<>();
+      result.add(elem);
+      result.addAll(list);
+      return result;
     }
 
     @Override

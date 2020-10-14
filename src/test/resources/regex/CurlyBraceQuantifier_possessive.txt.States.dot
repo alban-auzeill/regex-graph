@@ -9,7 +9,8 @@ digraph G {
 
   // state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
-  5[ label="Branch:5\l" ]
+  5[ label="Commit:5\l" ]
+  6[ label="Branch:6\l" ]
   4[ label="EndOfRegex:4\l  continuation: null\l" ]
   StartState[ label="StartState\l" ]
 
@@ -23,21 +24,23 @@ digraph G {
 
   // back-reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  5 -> 1 [ label="",  taillabel="possessive" ]
+  5 -> 1 [ label="",  taillabel="rollback" ]
 
   // successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 2 [ label="",  taillabel="" ]
-  2 -> 5 [ label="",  taillabel="" ]
-  5 -> 1 [ label="",  taillabel="1" ]
-  5 -> 4 [ label="",  taillabel="2" ]
+  2 -> 6 [ label="",  taillabel="" ]
+  5 -> 4 [ label="",  taillabel="" ]
+  6 -> 1 [ label="",  taillabel="1" ]
+  6 -> 5 [ label="",  taillabel="2" ]
   StartState -> 1 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 4 [ label="",  taillabel="" ]
-  2 -> 5 [ label="",  taillabel="" ]
+  2 -> 6 [ label="",  taillabel="" ]
   5 -> 4 [ label="",  taillabel="" ]
+  6 -> 5 [ label="",  taillabel="" ]
   4 -> end [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
   start -> StartState [ label="",  taillabel="" ]
