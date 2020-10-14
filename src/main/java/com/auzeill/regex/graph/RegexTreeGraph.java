@@ -401,8 +401,10 @@ public class RegexTreeGraph extends GraphWriter {
     public void visitAtomicGroup(AtomicGroupTree tree) {
       markVisited(tree);
       if (tree.getElement() != null) {
-        insertSuccessor(tree, tree.getElement());
-        copyContinuation(tree, tree.getElement());
+        State commit = createCommit(context.getNodeReference(tree), getSuccessors(tree), getContinuation(tree));
+        setSuccessor(tree, context.getNodeReference(tree.getElement()));
+        setSuccessor(tree.getElement(), commit.reference);
+        setContinuation(tree.getElement(), commit.reference);
       }
       super.visitAtomicGroup(tree);
     }
@@ -438,6 +440,31 @@ public class RegexTreeGraph extends GraphWriter {
       super.visitLookAround(tree);
     }
 
+    class State {
+      final String reference;
+      final RegexTree tree;
+      List<String> successors;
+      String continuation;
+      String backReference;
+
+      public State(String reference, RegexTree tree) {
+        this.reference = reference;
+        this.tree = tree;
+        this.successors = Collections.emptyList();
+        this.continuation = null;
+        this.backReference = null;
+      }
+    }
+
+    State createCommit(String rollbackReference, List<String> successors, String continuation) {
+      State commit = new State(context.createReference(), null);
+      context.add(new Node(commit.reference, "Commit:" + commit.reference, "state"));
+      context.add(new Edge(commit.reference, rollbackReference, "rollback", "back-reference"));
+      successorMap.put(commit.reference, successors);
+      continuationMap.put(commit.reference, continuation);
+      return commit;
+    }
+
     @Override
     public void visitRepetition(RepetitionTree tree) {
       markVisited(tree);
@@ -452,14 +479,10 @@ public class RegexTreeGraph extends GraphWriter {
         // "Commit" node
         Quantifier.Modifier modifier = tree.getQuantifier().getModifier();
         if (modifier == Quantifier.Modifier.POSSESSIVE) {
-          String commitReference = context.createReference();
-          context.add(new Node(commitReference, "Commit:" + commitReference, "state"));
-          context.add(new Edge(commitReference, treeReference, "rollback", "back-reference"));
-          successorMap.put(commitReference, successors);
-          continuationMap.put(commitReference, continuation);
-          repetitionSuccessors = Collections.singletonList(commitReference);
+          State commit = createCommit(treeReference, successors, continuation);
+          repetitionSuccessors = Collections.singletonList(commit.reference);
           successors = repetitionSuccessors;
-          continuation = commitReference;
+          continuation = commit.reference;
         }
 
         boolean isOptional = tree.getQuantifier().getMinimumRepetitions() == 0;
