@@ -26,7 +26,7 @@ import org.sonar.java.regex.ast.NonCapturingGroupTree;
 import org.sonar.java.regex.ast.PlainCharacterTree;
 import org.sonar.java.regex.ast.Quantifier;
 import org.sonar.java.regex.ast.RegexBaseVisitor;
-import org.sonar.java.regex.ast.RegexTree;
+import org.sonar.java.regex.ast.RegexSyntaxElement;
 import org.sonar.java.regex.ast.RepetitionTree;
 import org.sonar.java.regex.ast.SequenceTree;
 import org.sonar.java.regex.ast.UnicodeCodePointTree;
@@ -38,7 +38,7 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
 
   @FunctionalInterface
   interface CreationContext {
-    AutomatonState createState(StateType type, RegexTree tree);
+    AutomatonState createState(StateType type, RegexSyntaxElement tree);
   }
 
   AutomatonState startState;
@@ -53,7 +53,7 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
   }
 
   class StartStateContext implements CreationContext {
-    public AutomatonState createState(StateType type, RegexTree tree) {
+    public AutomatonState createState(StateType type, RegexSyntaxElement tree) {
       AutomatonState newState = new AutomatonState(type, tree, startState.successors(), startState.continuation());
       startState.setSuccessor(newState);
       startState.setContinuation(newState);
@@ -77,7 +77,7 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
       this.sequence = sequence;
     }
 
-    public AutomatonState createState(StateType type, RegexTree tree) {
+    public AutomatonState createState(StateType type, RegexSyntaxElement tree) {
       AutomatonState newState;
       if (lastChild == null) {
         newState = new AutomatonState(type, tree, sequence.successors(), sequence.continuation());
@@ -92,7 +92,7 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
     }
   }
 
-  AutomatonState createState(StateType type, RegexTree tree) {
+  AutomatonState createState(StateType type, RegexSyntaxElement tree) {
     return contextStack.peek().createState(type, tree);
   }
 
@@ -118,7 +118,7 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
       this.childSuccessors = disjunction.successors();
     }
 
-    public AutomatonState createState(StateType type, RegexTree tree) {
+    public AutomatonState createState(StateType type, RegexSyntaxElement tree) {
       AutomatonState newState = new AutomatonState(type, tree, childSuccessors, disjunction.continuation());
       if (disjunctionSuccessors == null) {
         disjunctionSuccessors = new ArrayList<>();
@@ -164,7 +164,7 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
       this.lookAroundTree = lookAroundTree;
     }
 
-    public AutomatonState createState(StateType type, RegexTree tree) {
+    public AutomatonState createState(StateType type, RegexSyntaxElement tree) {
       StateType endOfLookAroundType = lookAroundTree.getDirection() == AHEAD ? StateType.END_OF_LOOK_AROUND_BACKTRACKING : StateType.END_OF_LOOK_AROUND;
       AutomatonState endOfLookAround = new AutomatonState(endOfLookAroundType, null, Collections.emptyList(), lookAround.continuation());
       endOfLookAround.setReference(lookAround);
@@ -195,7 +195,7 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
       this.repetitionTree = repetitionTree;
     }
 
-    public AutomatonState createState(StateType type, RegexTree tree) {
+    public AutomatonState createState(StateType type, RegexSyntaxElement tree) {
       Quantifier quantifier = repetitionTree.getQuantifier();
       Quantifier.Modifier modifier = quantifier.getModifier();
       boolean isOptional = quantifier.getMinimumRepetitions() == 0;

@@ -2,7 +2,7 @@ package com.auzeill.regex.automaton;
 
 import java.util.Collections;
 import java.util.List;
-import org.sonar.java.regex.ast.RegexTree;
+import org.sonar.java.regex.ast.RegexSyntaxElement;
 
 public class AutomatonState {
 
@@ -31,16 +31,16 @@ public class AutomatonState {
   }
 
   private final StateType stateType;
-  private final RegexTree tree;
+  private final RegexSyntaxElement tree;
   private List<AutomatonState> successors;
   private AutomatonState continuation;
   private AutomatonState reference;
 
-  public AutomatonState(StateType stateType, RegexTree tree) {
+  public AutomatonState(StateType stateType, RegexSyntaxElement tree) {
     this(stateType, tree, Collections.emptyList(), null);
   }
 
-  public AutomatonState(StateType stateType, RegexTree tree, List<AutomatonState> successors, AutomatonState continuation) {
+  public AutomatonState(StateType stateType, RegexSyntaxElement tree, List<AutomatonState> successors, AutomatonState continuation) {
     this.stateType = stateType;
     this.tree = tree;
     this.successors = successors;
@@ -67,7 +67,7 @@ public class AutomatonState {
     return stateType;
   }
 
-  public RegexTree tree() {
+  public RegexSyntaxElement tree() {
     return tree;
   }
 

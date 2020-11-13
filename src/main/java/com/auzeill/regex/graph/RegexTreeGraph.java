@@ -14,6 +14,7 @@ import org.sonar.java.model.expression.LiteralTreeImpl;
 import org.sonar.java.regex.RegexParseResult;
 import org.sonar.java.regex.RegexParser;
 import org.sonar.java.regex.SyntaxError;
+import org.sonar.java.regex.ast.AbstractRegexSyntaxElement;
 import org.sonar.java.regex.ast.AtomicGroupTree;
 import org.sonar.java.regex.ast.BackReferenceTree;
 import org.sonar.java.regex.ast.BoundaryTree;
@@ -295,7 +296,7 @@ public class RegexTreeGraph extends GraphWriter {
       }
     }
 
-    void markVisited(RegexTree regexTree) {
+    void markVisited(RegexSyntaxElement regexTree) {
       Node node = context.getNode(context.getNodeReference(regexTree));
       if (node != null) {
         node.type = "tree-and-state";
@@ -638,11 +639,10 @@ public class RegexTreeGraph extends GraphWriter {
 
   @Override
   Object getObjectFieldValue(Object object, Field field) throws IllegalAccessException {
-    Object value = super.getObjectFieldValue(object, field);
-    if (field.getDeclaringClass().equals(RegexSyntaxElement.class) && field.getName().equals("range")) {
+    if (field.getDeclaringClass().equals(AbstractRegexSyntaxElement.class) && field.getName().equals("range")) {
       return directValue((RegexSyntaxElement) object);
     }
-    return value;
+    return super.getObjectFieldValue(object, field);
   }
 
   @Override
@@ -670,7 +670,10 @@ public class RegexTreeGraph extends GraphWriter {
     if (super.ignoreField(objectClass, field)) {
       return true;
     }
-    return objectClass.equals(RegexSyntaxElement.class) && field.getName().equals("source");
+    return
+      (field.getDeclaringClass().equals(AbstractRegexSyntaxElement.class) && field.getName().equals("source")) ||
+      (field.getDeclaringClass().equals(LookAroundTree.class) && field.getName().equals("successors")) ||
+      (field.getDeclaringClass().equals(RegexTree.class) && field.getName().equals("continuation"));
   }
 
 }
