@@ -15,7 +15,7 @@ dependencies {
     implementation "commons-io:commons-io:2.8.0"
     implementation "org.apache.commons:commons-text:1.9"
     implementation "org.nanohttpd:nanohttpd:2.3.1"
-    implementation 'org.sonarsource.java:java-frontend:6.9.0.23563'
+    implementation 'org.sonarsource.java:java-frontend:6.10.0-SNAPSHOT'
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.0"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.7.0"
