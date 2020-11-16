@@ -16,6 +16,8 @@ digraph G {
   9[ label="\l" ]
   10[ label="\l" ]
   11[ label="\l" ]
+  12[ label="\l" ]
+  13[ label="\l" ]
 
   // tree-and-state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
@@ -36,23 +38,31 @@ digraph G {
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
   2 -> 3 [ label="AST hierarchy  ",  taillabel="" ]
 
-  // successor edges
+  // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  6 -> 7 [ label="successor ",  taillabel="" ]
+  6 -> 7 [ label="epsilon\nsuccessor ",  taillabel="" ]
 
-  // continuation edges
-  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  7 -> 8 [ label="continuation ",  taillabel="" ]
+  // character-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
+  7 -> 8 [ label="character\nsuccessor ",  taillabel="" ]
+
+  // backreference-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="boxvee", arrowtail="none", dir="both"]
+  8 -> 9 [ label="backreference\nsuccessor ",  taillabel="" ]
 
   // negation-successor edges
-  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="odot", dir="both"]
-  8 -> 9 [ label="negation ",  taillabel="" ]
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="odiamondvee", arrowtail="none", dir="both"]
+  9 -> 10 [ label="negation\nsuccessor ",  taillabel="" ]
 
   // backtracking-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="icurvevee", arrowtail="none", dir="both"]
-  9 -> 10 [ label="backtracking   ",  taillabel="" ]
+  10 -> 11 [ label="backtracking\nsuccessor ",  taillabel="" ]
 
-  // back-reference edges
+  // continuation edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  11 -> 12 [ label="continuation ",  taillabel="" ]
+
+  // reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  10 -> 11 [ label="reference  ",  taillabel="" ]
+  12 -> 13 [ label="reference  ",  taillabel="" ]
 }

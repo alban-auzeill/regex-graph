@@ -22,13 +22,13 @@ digraph G {
   13[ label="PlainCharacterTree:13\{\l  .range: \{10, 11, \"o\"\}\l  .contents: \{'o'\}\l\}\l" ]
   14[ label="PlainCharacterTree:14\{\l  .range: \{11, 12, \"u\"\}\l  .contents: \{'u'\}\l\}\l" ]
 
-  // end nodes
-  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
-  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
-
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
   StartState[ label="StartState\l\l\l\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
+  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
@@ -44,13 +44,16 @@ digraph G {
   2 -> 7 [ label="",  taillabel="characterClasses[1]" ]
   1 -> 2 [ label="",  taillabel="contents" ]
 
-  // successor edges
-  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> EndOfRegex [ label="",  taillabel="" ]
+  // character-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> EndOfRegex [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
+  1 -> EndOfRegex [ label="",  taillabel="" ]
+
+  // epsilon-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  1 -> EndOfRegex [ label="",  taillabel="" ]
 }

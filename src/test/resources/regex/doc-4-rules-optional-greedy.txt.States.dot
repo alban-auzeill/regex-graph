@@ -9,24 +9,27 @@ digraph G {
   1[ label="RepetitionTree:1\{\l  .range: \{0, 4, \"\\\\d?\"\}\l\}\l" ]
   2[ label="EscapedCharacterClassTree:2\{\l  .range: \{0, 3, \"\\\\d\"\}\l  .type: 'd'\l  .property: null\l\}\l" ]
 
-  // end nodes
-  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
-  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
-
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
   StartState[ label="StartState\l\l\l\l" ]
 
-  // successor edges
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
+  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
+
+  // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> 2 [ label="",  taillabel="1" ]
+  StartState -> 1 [ label="",  taillabel="" ]
   1 -> EndOfRegex [ label="",  taillabel="2" ]
   2 -> EndOfRegex [ label="",  taillabel="" ]
-  StartState -> 1 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  StartState -> 1 [ label="",  taillabel="" ]
   1 -> EndOfRegex [ label="",  taillabel="" ]
   2 -> EndOfRegex [ label="",  taillabel="" ]
-  StartState -> 1 [ label="",  taillabel="" ]
+
+  // character-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
+  1 -> 2 [ label="",  taillabel="1" ]
 }

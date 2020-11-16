@@ -3,50 +3,35 @@ package com.auzeill.regex.graph;
 import com.auzeill.regex.graph.GraphContext.Edge;
 import com.auzeill.regex.graph.GraphContext.Node;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import org.sonar.java.model.InternalSyntaxToken;
 import org.sonar.java.model.expression.LiteralTreeImpl;
 import org.sonar.java.regex.RegexParseResult;
 import org.sonar.java.regex.RegexParser;
 import org.sonar.java.regex.SyntaxError;
 import org.sonar.java.regex.ast.AbstractRegexSyntaxElement;
-import org.sonar.java.regex.ast.AtomicGroupTree;
 import org.sonar.java.regex.ast.AutomatonState;
 import org.sonar.java.regex.ast.BackReferenceTree;
-import org.sonar.java.regex.ast.BoundaryTree;
 import org.sonar.java.regex.ast.BranchState;
 import org.sonar.java.regex.ast.CapturingGroupTree;
-import org.sonar.java.regex.ast.CharacterClassIntersectionTree;
-import org.sonar.java.regex.ast.CharacterClassTree;
-import org.sonar.java.regex.ast.CharacterClassUnionTree;
-import org.sonar.java.regex.ast.CharacterRangeTree;
-import org.sonar.java.regex.ast.DisjunctionTree;
-import org.sonar.java.regex.ast.DotTree;
 import org.sonar.java.regex.ast.EndOfLookaroundState;
-import org.sonar.java.regex.ast.EscapedCharacterClassTree;
+import org.sonar.java.regex.ast.FinalState;
 import org.sonar.java.regex.ast.FlagSet;
 import org.sonar.java.regex.ast.IndexRange;
 import org.sonar.java.regex.ast.JavaCharacter;
 import org.sonar.java.regex.ast.LookAroundTree;
-import org.sonar.java.regex.ast.MiscEscapeSequenceTree;
 import org.sonar.java.regex.ast.NegationState;
-import org.sonar.java.regex.ast.NonCapturingGroupTree;
-import org.sonar.java.regex.ast.PlainCharacterTree;
-import org.sonar.java.regex.ast.Quantifier;
-import org.sonar.java.regex.ast.RegexBaseVisitor;
 import org.sonar.java.regex.ast.RegexSource;
 import org.sonar.java.regex.ast.RegexSyntaxElement;
 import org.sonar.java.regex.ast.RegexToken;
 import org.sonar.java.regex.ast.RegexTree;
-import org.sonar.java.regex.ast.RepetitionTree;
-import org.sonar.java.regex.ast.SequenceTree;
-import org.sonar.java.regex.ast.UnicodeCodePointTree;
+import org.sonar.java.regex.ast.StartState;
 import org.sonar.plugins.java.api.tree.LiteralTree;
 import org.sonar.plugins.java.api.tree.Tree.Kind;
 
@@ -156,7 +141,13 @@ public class RegexTreeGraph extends GraphWriter {
     String color = "SlateGray";
     String fontColor = "DarkSlateGray";
     switch (edgeType) {
-      case "successor":
+      case "epsilon-successor":
+        style = "bold";
+        color = "DodgerBlue";
+        fontColor = "MediumBlue";
+        break;
+      case "character-successor":
+        arrowHead = "dotvee";
         style = "bold";
         color = "DodgerBlue";
         fontColor = "MediumBlue";
@@ -168,7 +159,13 @@ public class RegexTreeGraph extends GraphWriter {
         fontColor = "MediumBlue";
         break;
       case "negation-successor":
-        arrowTail = "odot";
+        arrowHead = "odiamondvee";
+        style = "bold";
+        color = "DodgerBlue";
+        fontColor = "MediumBlue";
+        break;
+      case "backreference-successor":
+        arrowHead = "boxvee";
         style = "bold";
         color = "DodgerBlue";
         fontColor = "MediumBlue";
@@ -178,7 +175,7 @@ public class RegexTreeGraph extends GraphWriter {
         color = "DodgerBlue";
         fontColor = "MediumBlue";
         break;
-      case "back-reference":
+      case "reference":
         style = "dashed";
         color = "Red";
         fontColor = "Firebrick";
@@ -208,20 +205,24 @@ public class RegexTreeGraph extends GraphWriter {
       context.add(new Node("9", "", "plaintext"));
       context.add(new Node("10", "", "plaintext"));
       context.add(new Node("11", "", "plaintext"));
+      context.add(new Node("12", "", "plaintext"));
+      context.add(new Node("13", "", "plaintext"));
 
       context.add(new Edge("1", "2", "", "", "transparent"));
       context.add(new Edge("2", "3", "AST hierarchy  ", "", "default"));
       context.add(new Edge("3", "4", "", "", "transparent"));
       context.add(new Edge("4", "5", "", "", "transparent"));
       context.add(new Edge("5", "6", "", "", "transparent"));
-      context.add(new Edge("6", "7", "successor ", "", "successor"));
-      context.add(new Edge("7", "8", "continuation ", "", "continuation"));
-      context.add(new Edge("8", "9", "negation ", "", "negation-successor"));
-      context.add(new Edge("9", "10", "backtracking   ", "", "backtracking-successor"));
-      context.add(new Edge("10", "11", "reference  ", "", "back-reference"));
+      context.add(new Edge("6", "7", "epsilon\nsuccessor ", "", "epsilon-successor"));
+      context.add(new Edge("7", "8", "character\nsuccessor ", "", "character-successor"));
+      context.add(new Edge("8", "9", "backreference\nsuccessor ", "", "backreference-successor"));
+      context.add(new Edge("9", "10", "negation\nsuccessor ", "", "negation-successor"));
+      context.add(new Edge("10", "11", "backtracking\nsuccessor ", "", "backtracking-successor"));
+      context.add(new Edge("11", "12", "continuation ", "", "continuation"));
+      context.add(new Edge("12", "13", "reference  ", "", "reference"));
     } else {
       if (includeStates) {
-        new AutomatonStateMetadataVisitor(context).visit(result);
+        includeStates(result);
       }
       for (SyntaxError syntaxError : result.getSyntaxErrors()) {
         context.add(new Node(
@@ -236,325 +237,165 @@ public class RegexTreeGraph extends GraphWriter {
     }
   }
 
-  static class AutomatonStateMetadataVisitor extends RegexBaseVisitor {
-    private final GraphContext context;
-    Map<String, List<String>> successorMap = new HashMap<>();
-    Map<String, String> continuationMap = new HashMap<>();
-    Map<String, String> continuationHeadType = new HashMap<>();
-    List<CapturingGroupTree> capturingGroups = new ArrayList<>();
-    List<BackReferenceTree> backReferenceTrees = new ArrayList<>();
-
-    public AutomatonStateMetadataVisitor(GraphContext context) {
-      this.context = context;
-    }
-
-    @Override
-    public void visit(RegexParseResult regexParseResult) {
-      if (!context.nodes().isEmpty()) {
-        context.setNodeReference(regexParseResult.getFinalState(), "EndOfRegex");
-        context.setNodeReference(regexParseResult.getStartState(), "StartState");
-
-        RegexTree firstNode = regexParseResult.getResult();
-        setContinuationAndSuccessor(regexParseResult.getStartState());
-        setContinuationAndSuccessor(firstNode);
-        setContinuationAndSuccessor(regexParseResult.getFinalState());
-
-        super.visit(regexParseResult);
-
-        //linkBackReferenceToCapturingGroup();
-
-        context.add(new Node("EndOfRegex", "EndOfRegex\n\n\n\n", "end"));
-        context.add(new Node("StartState", "StartState\n\n\n\n", "start"));
-
-        successorMap.forEach(this::createSuccessorEdges);
-        continuationMap.forEach(this::createContinuationEdge);
+  public void includeStates(RegexParseResult result) {
+    if (!context.nodes().isEmpty()) {
+      Set<AutomatonState> processedStates = new LinkedHashSet<>();
+      Deque<AutomatonState> processingQueue = new LinkedList<>();
+      processingQueue.addLast(result.getStartState());
+      while (!processingQueue.isEmpty()) {
+        AutomatonState state = processingQueue.removeFirst();
+        if (state != null && processedStates.add(state)) {
+          createState(state);
+          state.successors().forEach(processingQueue::addLast);
+          processingQueue.addLast(state.continuation());
+        }
       }
-    }
-
-    private void setContinuationAndSuccessor(AutomatonState initialState) {
-      Deque<AutomatonState> inProgress = new LinkedList<>();
-      inProgress.push(initialState);
-      while (!inProgress.isEmpty()) {
-        AutomatonState state = inProgress.pop();
-        String stateReference = context.getNodeReference(state);
-        if (stateReference == null) {
-          throw new IllegalStateException("Not yet supported: " + state.getClass());
-        }
-        setContinuationType(state);
-        if (state.continuation() != null) {
-          String continuationReference = getOrCreateStateReference(state.continuation(), inProgress);
-          continuationMap.put(stateReference, continuationReference);
-        }
+      if (!processedStates.contains(result.getFinalState())) {
+        throw new IllegalStateException("FinalState is not reachable from StartState");
+      }
+      for (AutomatonState state : processedStates) {
         List<? extends AutomatonState> successors = state.successors();
-        // TODO why EndOfLookaroundState.successors() is not null!
-        if (!successors.isEmpty() && !(state instanceof EndOfLookaroundState)) {
-          List<String> successorReferences = new ArrayList<>();
-          for (AutomatonState successor : successors) {
-            String successorReference = getOrCreateStateReference(successor, inProgress);
-            successorReferences.add(successorReference);
-          }
-          successorMap.put(stateReference, successorReferences);
+        for (int i = 0; i < successors.size(); i++) {
+          String label = successors.size() == 1 ? "" : String.valueOf(i + 1);
+          createSuccessorEdge(state, successors.get(i), label);
         }
-      }
-    }
-
-    // TODO fix this
-    private LookAroundTree getParent(EndOfLookaroundState state) {
-      try {
-        Field field = EndOfLookaroundState.class.getDeclaredField("parent");
-        if (!field.canAccess(state)) {
-          field.setAccessible(true);
+        if (state.continuation() != null) {
+          createContinuationEdge(state, state.continuation());
         }
-        return (LookAroundTree) field.get(state);
-      } catch (IllegalAccessException | NoSuchFieldException e) {
-        throw new IllegalStateException(e);
+        createParentEdge(state, processedStates);
       }
     }
+  }
 
-    private RegexTree getParent(BranchState state) {
-      try {
-        Field field = BranchState.class.getDeclaredField("parent");
-        if (!field.canAccess(state)) {
-          field.setAccessible(true);
-        }
-        return (RegexTree) field.get(state);
-      } catch (IllegalAccessException | NoSuchFieldException e) {
-        throw new IllegalStateException(e);
+  private void createState(AutomatonState state) {
+    String reference = context.getNodeReference(state);
+    Node node = context.getNode(reference);
+    if (node != null) {
+      node.type = "tree-and-state";
+      return;
+    }
+    if (reference != null) {
+      throw new IllegalStateException("Unexpected node reference without node");
+    }
+    String label;
+    String type = "state";
+    if (state instanceof StartState) {
+      reference = "StartState";
+      label = "StartState\n\n\n\n";
+      type = "start";
+    } else if (state instanceof FinalState) {
+      reference = "EndOfRegex";
+      label = "EndOfRegex\n\n\n\n";
+      type = "end";
+    } else if (state instanceof BranchState) {
+      reference = createNewNodeReference(state);
+      label = "Branch:" + reference;
+    } else if (state instanceof EndOfLookaroundState) {
+      reference = createNewNodeReference(state);
+      label = "EndOfLookAround:" + reference + (state.continuation() == null ? "\n  continuation: null" : "") + "\n";
+    } else if (state instanceof NegationState) {
+      reference = createNewNodeReference(state);
+      label = "Negation:" + reference;
+    } else {
+      throw new IllegalStateException("Unsupported AutomatonState " + state.getClass());
+    }
+    context.add(new Node(reference, label, type));
+    context.setNodeReference(state, reference);
+  }
+
+  private void createSuccessorEdge(AutomatonState from, AutomatonState to, String label) {
+    createEdge(from, to, label, successorType(to));
+  }
+
+  private void createContinuationEdge(AutomatonState from, AutomatonState to) {
+    createEdge(from, to, "", "continuation");
+  }
+
+  private void createEdge(AutomatonState from, AutomatonState to, String label, String type) {
+    String fromReference = context.getNodeReference(from);
+    if (fromReference == null) {
+      throw new IllegalStateException("Missing reference for " + from.getClass());
+    }
+    String toReference = context.getNodeReference(to);
+    if (toReference == null) {
+      throw new IllegalStateException("Missing reference for " + to.getClass());
+    }
+    context.add(new Edge(fromReference, toReference, label, type));
+  }
+
+  private void createParentEdge(AutomatonState state, Set<AutomatonState> allStates) {
+    if (state instanceof BranchState) {
+      createEdge(state, getParent((BranchState) state), "parent", "reference");
+    } else if (state instanceof EndOfLookaroundState) {
+      createEdge(state, getParent((EndOfLookaroundState) state), "parent", "reference");
+    } else if (state instanceof BackReferenceTree) {
+      findMatchingGroup((BackReferenceTree) state, allStates)
+        .ifPresent(capturingGroup -> createEdge(state, capturingGroup, "reference", "reference"));
+    }
+  }
+
+  private String createNewNodeReference(AutomatonState state) {
+    String reference = context.createObjectReference(state);
+    context.setNodeReference(state, reference);
+    return reference;
+  }
+
+  private static String successorType(AutomatonState to) {
+    switch (to.incomingTransitionType()) {
+      case EPSILON:
+        return "epsilon-successor";
+      case CHARACTER:
+        return "character-successor";
+      case BACK_REFERENCE:
+        return "backreference-successor";
+      case LOOKAROUND_BACKTRACKING:
+        return "backtracking-successor";
+      case NEGATION:
+        return "negation-successor";
+      default:
+        throw new IllegalStateException("Unsupported TransitionType: " + to.incomingTransitionType());
+    }
+  }
+
+  private Optional<CapturingGroupTree> findMatchingGroup(BackReferenceTree backReference, Set<AutomatonState> allStates) {
+    return allStates.stream()
+      .filter(CapturingGroupTree.class::isInstance)
+      .map(CapturingGroupTree.class::cast)
+      .filter(group -> matches(backReference, group))
+      .findFirst();
+  }
+
+  private static boolean matches(BackReferenceTree backReferenceTree, CapturingGroupTree capturingGroup) {
+    if (backReferenceTree.isNumerical()) {
+      return capturingGroup.getGroupNumber() == backReferenceTree.groupNumber();
+    } else {
+      return capturingGroup.getName().filter(name -> name.equals(backReferenceTree.groupName())).isPresent();
+    }
+  }
+
+  // TODO fix this
+  private static LookAroundTree getParent(EndOfLookaroundState state) {
+    try {
+      Field field = EndOfLookaroundState.class.getDeclaredField("parent");
+      if (!field.canAccess(state)) {
+        field.setAccessible(true);
       }
+      return (LookAroundTree) field.get(state);
+    } catch (IllegalAccessException | NoSuchFieldException e) {
+      throw new IllegalStateException(e);
     }
+  }
 
-    private String getOrCreateStateReference(AutomatonState state, Deque<AutomatonState> inProgress) {
-      String reference = context.getNodeReference(state);
-      if (reference == null) {
-        if (state instanceof BranchState) {
-          reference = createNewNodeReference(state);
-          RegexTree parent = getParent((BranchState) state);
-          String name = (parent instanceof RepetitionTree &&
-            ((RepetitionTree)parent).getQuantifier().getModifier() == Quantifier.Modifier.POSSESSIVE) ? "Commit:" :  "Branch:";
-          context.add(new Node(reference, name + reference, "state"));
-          String parentReference = context.getNodeReference(parent);
-          context.add(new Edge(reference, parentReference, "parent", "back-reference"));
-          inProgress.push(state);
-        } else if (state instanceof EndOfLookaroundState) {
-          reference = createNewNodeReference(state);
-          context.add(new Node(reference, "EndOfLookAround:" + reference + "\n  continuation: null\n", "state"));
-          LookAroundTree parent = getParent((EndOfLookaroundState) state);
-          String parentReference = context.getNodeReference(parent);
-          context.add(new Edge(reference, parentReference, "parent", "back-reference"));
-          inProgress.push(state);
-        } else if (state instanceof NegationState) {
-
-          // ensure the EndOfLookaroundState is registered before the NegationState
-          // EndOfLookaroundState is the continuation.continuation of NegationState
-          getOrCreateStateReference(state.continuation().continuation(), inProgress);
-
-          reference = createNewNodeReference(state);
-          context.add(new Node(reference, "Negation:" + reference, "state"));
-          inProgress.push(state);
-        } else {
-          throw new IllegalStateException("AutomatonState not yet supported: " + state.getClass());
-        }
+  // TODO fix this
+  private static RegexTree getParent(BranchState state) {
+    try {
+      Field field = BranchState.class.getDeclaredField("parent");
+      if (!field.canAccess(state)) {
+        field.setAccessible(true);
       }
-      return reference;
-    }
-
-    private String createNewNodeReference(AutomatonState state) {
-      String reference = context.createObjectReference(state);
-      context.setNodeReference(state, reference);
-      return reference;
-    }
-
-
-    void setContinuationType(AutomatonState state) {
-      String reference = context.getNodeReference(state);
-      switch (state.incomingTransitionType()) {
-        case LOOKAROUND_BACKTRACKING:
-          continuationHeadType.put(reference, "backtracking-successor");
-          break;
-        case NEGATION:
-          continuationHeadType.put(reference, "negation-successor");
-          break;
-        case BACK_REFERENCE:
-          continuationHeadType.put(reference, "back-reference");
-          break;
-      }
-    }
-
-    void markAsTreeAndStateNode(RegexTree tree) {
-      Node node = context.getNode(context.getNodeReference(tree));
-      if (node != null) {
-        node.type = "tree-and-state";
-      }
-      setContinuationType(tree);
-    }
-
-    void createSuccessorEdges(String from, List<String> toList) {
-      if (toList != null) {
-        for (int i = 0; i < toList.size(); i++) {
-          String label = toList.size() == 1 ? "" : String.valueOf(i + 1);
-          createEdge(from, toList.get(i), label, "successor");
-        }
-      }
-    }
-
-    void createContinuationEdge(String from, String to) {
-      createEdge(from, to, "", "continuation");
-    }
-
-    void createEdge(String from, String to, String label, String type) {
-      if (from != null && to != null) {
-        if (type.equals("successor")) {
-          type = continuationHeadType.getOrDefault(to, "successor");
-        }
-        context.add(new Edge(from, to, label, type));
-      }
-    }
-
-    @Override
-    public void visitSequence(SequenceTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      super.visitSequence(tree);
-    }
-
-    @Override
-    public void visitDisjunction(DisjunctionTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      super.visitDisjunction(tree);
-    }
-
-    @Override
-    public void visitCapturingGroup(CapturingGroupTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      capturingGroups.add(tree);
-      super.visitCapturingGroup(tree);
-    }
-
-    @Override
-    protected void doVisitNonCapturingGroup(NonCapturingGroupTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      super.doVisitNonCapturingGroup(tree);
-    }
-
-    @Override
-    public void visitAtomicGroup(AtomicGroupTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      super.visitAtomicGroup(tree);
-    }
-
-    @Override
-    public void visitLookAround(LookAroundTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      super.visitLookAround(tree);
-    }
-
-    class State {
-      final String reference;
-      final RegexTree tree;
-      List<String> successors;
-      String continuation;
-      String backReference;
-
-      public State(String reference, RegexTree tree) {
-        this.reference = reference;
-        this.tree = tree;
-        this.successors = Collections.emptyList();
-        this.continuation = null;
-        this.backReference = null;
-      }
-    }
-
-    State createCommit(String rollbackReference, List<String> successors, String continuation) {
-      State commit = new State(context.createReference(), null);
-      context.add(new Node(commit.reference, "Commit:" + commit.reference, "state"));
-      context.add(new Edge(commit.reference, rollbackReference, "rollback", "back-reference"));
-      successorMap.put(commit.reference, successors);
-      continuationMap.put(commit.reference, continuation);
-      return commit;
-    }
-
-    @Override
-    public void visitRepetition(RepetitionTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      super.visitRepetition(tree);
-    }
-
-    public <T> List<T> concat(List<T> list, T elem) {
-      List<T> result = new ArrayList<>(list);
-      result.add(elem);
-      return result;
-    }
-
-    public <T> List<T> concat(T elem, List<T> list) {
-      List<T> result = new ArrayList<>();
-      result.add(elem);
-      result.addAll(list);
-      return result;
-    }
-
-    @Override
-    public void visitBackReference(BackReferenceTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-      backReferenceTrees.add(tree);
-    }
-
-    @Override
-    public void visitCharacterClass(CharacterClassTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-    }
-
-    @Override
-    public void visitPlainCharacter(PlainCharacterTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-    }
-
-    @Override
-    public void visitUnicodeCodePoint(UnicodeCodePointTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-    }
-
-    @Override
-    public void visitCharacterRange(CharacterRangeTree tree) {
-    }
-
-    @Override
-    public void visitCharacterClassUnion(CharacterClassUnionTree tree) {
-    }
-
-    @Override
-    public void visitCharacterClassIntersection(CharacterClassIntersectionTree tree) {
-    }
-
-    @Override
-    public void visitDot(DotTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-    }
-
-    @Override
-    public void visitEscapedCharacterClass(EscapedCharacterClassTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
-    }
-
-    @Override
-    public void visitBoundary(BoundaryTree boundaryTree) {
-    }
-
-    @Override
-    public void visitMiscEscapeSequence(MiscEscapeSequenceTree tree) {
-      markAsTreeAndStateNode(tree);
-      setContinuationAndSuccessor(tree);
+      return (RegexTree) field.get(state);
+    } catch (IllegalAccessException | NoSuchFieldException e) {
+      throw new IllegalStateException(e);
     }
   }
 

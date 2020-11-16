@@ -9,45 +9,49 @@ digraph G {
   1[ label="LookAroundTree:1\{\l  .range: \{0, 5, \"(?!b)\"\}\l  .kind: LOOK_AROUND\l  .groupHeader: \{0, 3, \"(?!\"\}\l  .polarity: NEGATIVE\l  .direction: AHEAD\l\}\l" ]
   2[ label="PlainCharacterTree:2\{\l  .range: \{3, 4, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
 
+  // start nodes
+  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
+  StartState[ label="StartState\l\l\l\l" ]
+
   // state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
-  3[ label="EndOfLookAround:3\l  continuation: null\l" ]
-  4[ label="Negation:4\l" ]
+  3[ label="Negation:3\l" ]
+  4[ label="EndOfLookAround:4\l" ]
 
   // end nodes
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
   EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
-  // start nodes
-  node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
-  StartState[ label="StartState\l\l\l\l" ]
-
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 2 [ label="",  taillabel="element" ]
 
-  // back-reference edges
-  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  3 -> 1 [ label="",  taillabel="parent" ]
-
-  // negation-successor edges
-  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="odot", dir="both"]
-  1 -> 4 [ label="",  taillabel="" ]
-
-  // backtracking-successor edges
-  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="icurvevee", arrowtail="none", dir="both"]
-  2 -> 3 [ label="",  taillabel="" ]
-
-  // successor edges
+  // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  4 -> 2 [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
+  4 -> EndOfRegex [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> EndOfRegex [ label="",  taillabel="" ]
-  2 -> 3 [ label="",  taillabel="" ]
-  3 -> EndOfRegex [ label="",  taillabel="" ]
-  4 -> 2 [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
+  1 -> EndOfRegex [ label="",  taillabel="" ]
+  3 -> 2 [ label="",  taillabel="" ]
+  2 -> 4 [ label="",  taillabel="" ]
+  4 -> EndOfRegex [ label="",  taillabel="" ]
+
+  // negation-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="odiamondvee", arrowtail="none", dir="both"]
+  1 -> 3 [ label="",  taillabel="" ]
+
+  // character-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
+  3 -> 2 [ label="",  taillabel="" ]
+
+  // backtracking-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="icurvevee", arrowtail="none", dir="both"]
+  2 -> 4 [ label="",  taillabel="" ]
+
+  // reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  4 -> 1 [ label="",  taillabel="parent" ]
 }
