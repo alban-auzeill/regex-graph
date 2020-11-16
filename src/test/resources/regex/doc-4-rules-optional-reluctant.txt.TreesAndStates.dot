@@ -13,29 +13,32 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   3[ label="SimpleQuantifier:3\{\l  .range: \{3, 5, \"??\"\}\l  .modifier: RELUCTANT\l  .kind: QUESTION_MARK\l\}\l" ]
 
-  // end nodes
-  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
-  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
-
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
   StartState[ label="StartState\l\l\l\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
+  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 2 [ label="",  taillabel="element" ]
   1 -> 3 [ label="",  taillabel="quantifier" ]
 
-  // successor edges
+  // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
-  1 -> EndOfRegex [ label="",  taillabel="1" ]
-  1 -> 2 [ label="",  taillabel="2" ]
-  2 -> EndOfRegex [ label="",  taillabel="" ]
   StartState -> 1 [ label="",  taillabel="" ]
+  1 -> EndOfRegex [ label="",  taillabel="1" ]
+  2 -> EndOfRegex [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  StartState -> 1 [ label="",  taillabel="" ]
   1 -> EndOfRegex [ label="",  taillabel="" ]
   2 -> EndOfRegex [ label="",  taillabel="" ]
-  StartState -> 1 [ label="",  taillabel="" ]
+
+  // character-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
+  1 -> 2 [ label="",  taillabel="2" ]
 }

@@ -13,13 +13,13 @@ digraph G {
   7[ label="PlainCharacterTree:7\{\l  .range: \{9, 10, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
   9[ label="BackReferenceTree:9\{\l  .range: \{11, 19, \"\\\\k<foo>\"\}\l  .groupName: \"foo\"\l  .key: \{'k'\}\l\}\l" ]
 
-  // end nodes
-  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
-  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
-
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
   StartState[ label="StartState\l\l\l\l" ]
+
+  // end nodes
+  node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
+  EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
@@ -29,28 +29,34 @@ digraph G {
   1 -> 3 [ label="",  taillabel="items[0]" ]
   1 -> 9 [ label="",  taillabel="items[1]" ]
 
-  // back-reference edges
-  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
-  9 -> 3 [ label="",  taillabel="reference" ]
-
-  // successor edges
+  // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  StartState -> 1 [ label="",  taillabel="" ]
   1 -> 3 [ label="",  taillabel="" ]
   3 -> 4 [ label="",  taillabel="" ]
-  4 -> 6 [ label="",  taillabel="1" ]
-  4 -> 7 [ label="",  taillabel="2" ]
-  6 -> 9 [ label="",  taillabel="" ]
-  7 -> 9 [ label="",  taillabel="" ]
   9 -> EndOfRegex [ label="",  taillabel="" ]
-  StartState -> 1 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
+  StartState -> 1 [ label="",  taillabel="" ]
   1 -> EndOfRegex [ label="",  taillabel="" ]
   3 -> 9 [ label="",  taillabel="" ]
   4 -> 9 [ label="",  taillabel="" ]
+  9 -> EndOfRegex [ label="",  taillabel="" ]
   6 -> 9 [ label="",  taillabel="" ]
   7 -> 9 [ label="",  taillabel="" ]
-  9 -> EndOfRegex [ label="",  taillabel="" ]
-  StartState -> 1 [ label="",  taillabel="" ]
+
+  // character-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
+  4 -> 6 [ label="",  taillabel="1" ]
+  4 -> 7 [ label="",  taillabel="2" ]
+
+  // reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  9 -> 3 [ label="",  taillabel="reference" ]
+
+  // backreference-successor edges
+  edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="boxvee", arrowtail="none", dir="both"]
+  6 -> 9 [ label="",  taillabel="" ]
+  7 -> 9 [ label="",  taillabel="" ]
 }
