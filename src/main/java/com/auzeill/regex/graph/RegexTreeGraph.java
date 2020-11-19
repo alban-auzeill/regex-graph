@@ -31,6 +31,7 @@ import org.sonar.java.regex.ast.RegexSource;
 import org.sonar.java.regex.ast.RegexSyntaxElement;
 import org.sonar.java.regex.ast.RegexToken;
 import org.sonar.java.regex.ast.RegexTree;
+import org.sonar.java.regex.ast.StartOfLookBehindState;
 import org.sonar.java.regex.ast.StartState;
 import org.sonar.plugins.java.api.tree.LiteralTree;
 import org.sonar.plugins.java.api.tree.Tree.Kind;
@@ -296,6 +297,9 @@ public class RegexTreeGraph extends GraphWriter {
     } else if (state instanceof NegationState) {
       reference = createNewNodeReference(state);
       label = "Negation:" + reference;
+    } else if (state instanceof StartOfLookBehindState) {
+      reference = createNewNodeReference(state);
+      label = "StartOfLookBehindState:" + reference;
     } else {
       throw new IllegalStateException("Unsupported AutomatonState " + state.getClass());
     }
@@ -450,7 +454,8 @@ public class RegexTreeGraph extends GraphWriter {
     }
     return (field.getDeclaringClass().equals(AbstractRegexSyntaxElement.class) && field.getName().equals("source")) ||
       (field.getDeclaringClass().equals(LookAroundTree.class) && field.getName().equals("successors")) ||
-      (field.getDeclaringClass().equals(RegexTree.class) && field.getName().equals("continuation"));
+      (field.getDeclaringClass().equals(RegexTree.class) && field.getName().equals("continuation")) ||
+      (field.getDeclaringClass().equals(LookAroundTree.class) && field.getName().equals("inner"));
   }
 
 }

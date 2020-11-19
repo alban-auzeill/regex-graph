@@ -25,6 +25,7 @@ digraph G {
   // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
+  1 -> EndOfRegex [ label="",  taillabel="2" ]
   4 -> EndOfRegex [ label="",  taillabel="" ]
 
   // continuation edges
@@ -37,7 +38,7 @@ digraph G {
 
   // negation-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="odiamondvee", arrowtail="none", dir="both"]
-  1 -> 3 [ label="",  taillabel="" ]
+  1 -> 3 [ label="",  taillabel="1" ]
 
   // character-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
