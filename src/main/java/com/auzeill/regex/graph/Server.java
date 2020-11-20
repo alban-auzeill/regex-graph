@@ -11,10 +11,10 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class Server extends NanoHTTPD {
 
-  private static final int DEFAULT_SERVER_PORT = Integer.parseInt(System.getProperty("port", "9000"));
-
   public static void main(String[] args) throws IOException {
-    new Server(DEFAULT_SERVER_PORT);
+    String portProperty = System.getProperty("port", "");
+    int port = portProperty.matches("\\d++") ? Integer.parseInt(portProperty) : 9000;
+    new Server(port);
   }
 
   public Server(int port) throws IOException {
