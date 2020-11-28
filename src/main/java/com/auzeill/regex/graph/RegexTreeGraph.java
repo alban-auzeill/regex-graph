@@ -20,6 +20,7 @@ import org.sonar.java.regex.ast.AutomatonState;
 import org.sonar.java.regex.ast.BackReferenceTree;
 import org.sonar.java.regex.ast.BranchState;
 import org.sonar.java.regex.ast.CapturingGroupTree;
+import org.sonar.java.regex.ast.EndOfCapturingGroupState;
 import org.sonar.java.regex.ast.EndOfLookaroundState;
 import org.sonar.java.regex.ast.FinalState;
 import org.sonar.java.regex.ast.FlagSet;
@@ -294,6 +295,9 @@ public class RegexTreeGraph extends GraphWriter {
     } else if (state instanceof EndOfLookaroundState) {
       reference = createNewNodeReference(state);
       label = "EndOfLookAround:" + reference + (state.continuation() == null ? "\n  continuation: null" : "") + "\n";
+    } else if (state instanceof EndOfCapturingGroupState) {
+      reference = createNewNodeReference(state);
+      label = "EndOfCapturingGroup:" + reference;
     } else if (state instanceof NegationState) {
       reference = createNewNodeReference(state);
       label = "Negation:" + reference;
@@ -332,6 +336,8 @@ public class RegexTreeGraph extends GraphWriter {
       createEdge(state, getParent((BranchState) state), "parent", "reference");
     } else if (state instanceof EndOfLookaroundState) {
       createEdge(state, getParent((EndOfLookaroundState) state), "parent", "reference");
+    } else if (state instanceof EndOfCapturingGroupState) {
+      createEdge(state, ((EndOfCapturingGroupState) state).group(), "group", "reference");
     } else if (state instanceof BackReferenceTree) {
       findMatchingGroup((BackReferenceTree) state, allStates)
         .ifPresent(capturingGroup -> createEdge(state, capturingGroup, "reference", "reference"));

@@ -25,6 +25,7 @@ digraph G {
   // state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
   12[ label="Branch:12\l" ]
+  13[ label="EndOfCapturingGroup:13\l" ]
 
   // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
@@ -34,8 +35,9 @@ digraph G {
   4 -> 5 [ label="",  taillabel="" ]
   11 -> EndOfRegex [ label="",  taillabel="" ]
   12 -> 3 [ label="",  taillabel="1" ]
-  7 -> 12 [ label="",  taillabel="" ]
-  8 -> 12 [ label="",  taillabel="" ]
+  7 -> 13 [ label="",  taillabel="" ]
+  8 -> 13 [ label="",  taillabel="" ]
+  13 -> 12 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
@@ -44,10 +46,11 @@ digraph G {
   3 -> 11 [ label="",  taillabel="" ]
   4 -> 12 [ label="",  taillabel="" ]
   11 -> EndOfRegex [ label="",  taillabel="" ]
-  5 -> 12 [ label="",  taillabel="" ]
+  5 -> 13 [ label="",  taillabel="" ]
   12 -> 11 [ label="",  taillabel="" ]
-  7 -> 12 [ label="",  taillabel="" ]
-  8 -> 12 [ label="",  taillabel="" ]
+  7 -> 13 [ label="",  taillabel="" ]
+  8 -> 13 [ label="",  taillabel="" ]
+  13 -> 12 [ label="",  taillabel="" ]
 
   // character-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
@@ -58,4 +61,5 @@ digraph G {
   // reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
   12 -> 3 [ label="",  taillabel="parent" ]
+  13 -> 4 [ label="",  taillabel="group" ]
 }

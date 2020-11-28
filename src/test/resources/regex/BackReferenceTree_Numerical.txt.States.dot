@@ -21,22 +21,29 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
   EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  10[ label="EndOfCapturingGroup:10\l" ]
+
   // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
   1 -> 3 [ label="",  taillabel="" ]
   3 -> 4 [ label="",  taillabel="" ]
   9 -> EndOfRegex [ label="",  taillabel="" ]
+  6 -> 10 [ label="",  taillabel="" ]
+  7 -> 10 [ label="",  taillabel="" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
   1 -> EndOfRegex [ label="",  taillabel="" ]
   3 -> 9 [ label="",  taillabel="" ]
-  4 -> 9 [ label="",  taillabel="" ]
+  4 -> 10 [ label="",  taillabel="" ]
   9 -> EndOfRegex [ label="",  taillabel="" ]
-  6 -> 9 [ label="",  taillabel="" ]
-  7 -> 9 [ label="",  taillabel="" ]
+  6 -> 10 [ label="",  taillabel="" ]
+  7 -> 10 [ label="",  taillabel="" ]
+  10 -> 9 [ label="",  taillabel="" ]
 
   // character-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
@@ -46,9 +53,9 @@ digraph G {
   // reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
   9 -> 3 [ label="",  taillabel="reference" ]
+  10 -> 3 [ label="",  taillabel="group" ]
 
   // backreference-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="boxvee", arrowtail="none", dir="both"]
-  6 -> 9 [ label="",  taillabel="" ]
-  7 -> 9 [ label="",  taillabel="" ]
+  10 -> 9 [ label="",  taillabel="" ]
 }
