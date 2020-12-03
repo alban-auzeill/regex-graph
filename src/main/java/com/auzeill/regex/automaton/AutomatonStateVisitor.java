@@ -143,9 +143,9 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
   }
 
   @Override
-  protected void doVisitNonCapturingGroup(NonCapturingGroupTree tree) {
+  public void visitNonCapturingGroup(NonCapturingGroupTree tree) {
     AutomatonState group = createState(StateType.EPSILON, tree);
-    executeIn(new SequenceContext(group), () -> super.doVisitNonCapturingGroup(tree));
+    executeIn(new SequenceContext(group), () -> super.visitNonCapturingGroup(tree));
   }
 
   @Override
