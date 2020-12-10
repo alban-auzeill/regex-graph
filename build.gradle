@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id "application"
+    id 'application'
+    id 'org.sonarqube' version '3.0'
 }
 
 group 'org.example'
@@ -28,7 +29,7 @@ test {
     doFirst { jvmArgs += ['--add-opens', 'java.base/java.util.regex=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED' ] }
 }
 run {
-    systemProperties = [ 'dot': System.getProperty('dot'), 'port': System.getProperty('port') ]
+    systemProperties = [ 'dot': System.getProperty('dot'), 'port': System.getProperty('port'), 'working-dir': System.getProperty('working-dir'), 'generate': System.getProperty('generate') ]
 }
 
 ext {

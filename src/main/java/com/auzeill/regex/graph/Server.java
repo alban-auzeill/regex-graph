@@ -4,6 +4,8 @@ import fi.iki.elonen.NanoHTTPD;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
@@ -11,10 +13,23 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class Server extends NanoHTTPD {
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    String imageListPath = System.getProperty("generate", "");
+    if (!imageListPath.isEmpty()) {
+      GeneratePng.generate(getWorkingDir(), getWorkingDir().resolve(imageListPath), System.out, System.err);
+      return;
+    }
     String portProperty = System.getProperty("port", "");
     int port = portProperty.matches("\\d++") ? Integer.parseInt(portProperty) : 9000;
     new Server(port);
+  }
+
+  private static Path getWorkingDir() {
+    String workingDir = System.getProperty("working-dir", "");
+    if (workingDir.isBlank()) {
+      workingDir = ".";
+    }
+    return Paths.get(workingDir);
   }
 
   public Server(int port) throws IOException {

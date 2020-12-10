@@ -7,11 +7,11 @@ digraph G {
   // default nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   1[ label="SequenceTree:1\{\l  .range: \{0, 5, \"(?i)a\"\}\l\}\l" ]
-  3[ label="NonCapturingGroupTree:3\{\l  .range: \{0, 4, \"(?i)\"\}\l  .kind: NON_CAPTURING_GROUP\l  .element: null\l  .groupHeader: null\l  .enabledFlags:\l    FlagSet:4\{\l      .mask: 2\l      .flagCharacters:\l        :5\{\l          2: \{'i'\}\l        \}\l    \}\l  .disabledFlags:\l    FlagSet:6\{\l      .mask: 0\l      .flagCharacters: :7\{ \}\l    \}\l\}\l" ]
-  8[ label="PlainCharacterTree:8\{\l  .range: \{4, 5, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  3[ label="NonCapturingGroupTree:3\{\l  .range: \{0, 4, \"(?i)\"\}\l  .activeFlags: 2\l  .kind: NON_CAPTURING_GROUP\l  .element: null\l  .groupHeader: null\l  .enabledFlags: 2\l\}\l" ]
+  4[ label="PlainCharacterTree:4\{\l  .range: \{4, 5, \"a\"\}\l  .activeFlags: 2\l  .contents: \{'a'\}\l\}\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
   1 -> 3 [ label="",  taillabel="items[0]" ]
-  1 -> 8 [ label="",  taillabel="items[1]" ]
+  1 -> 4 [ label="",  taillabel="items[1]" ]
 }

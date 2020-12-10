@@ -438,6 +438,9 @@ public class RegexTreeGraph extends GraphWriter {
     if (value.getClass().equals(IndexRange.class)) {
       IndexRange range = (IndexRange) value;
       return new DirectValue("{" + range.getBeginningOffset() + ", " + range.getEndingOffset() + "}");
+    } else if (value.getClass().equals(FlagSet.class)) {
+      int mask = ((FlagSet) value).getMask();
+      return mask == 0 ? null : new DirectValue(Integer.toString(mask));
     } else if (value.getClass().equals(JavaCharacter.class)) {
       JavaCharacter javaCharacter = (JavaCharacter) value;
       String escape = javaCharacter.isEscapeSequence() ? ", isEscapeSequence=true" : "";

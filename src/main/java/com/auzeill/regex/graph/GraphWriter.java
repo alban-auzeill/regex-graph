@@ -106,6 +106,9 @@ public class GraphWriter {
       return "null";
     }
     object = filterValue(object);
+    if (object == null) {
+      return null;
+    }
     if (object instanceof DirectValue || object instanceof Boolean || object instanceof Number) {
       // Number: Byte Short Integer Long Float Double BigInteger BigDecimal ...
       return object.toString();
