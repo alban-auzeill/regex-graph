@@ -7,7 +7,7 @@ digraph G {
   // default nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   1[ label="RepetitionTree:1\{\l  .range: \{0, 5, \"a\{4,\}\"\}\l\}\l" ]
-  2[ label="PlainCharacterTree:2\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  2[ label="CharacterTree:2\{\l  .range: \{0, 1, \"a\"\}\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
   3[ label="CurlyBraceQuantifier:3\{\l  .range: \{1, 5, \"\{4,\}\"\}\l  .modifier: GREEDY\l  .minimumRepetitionsToken: \{2, 3, \"4\"\}\l  .minimumRepetitions: 4\l  .commaToken: \{3, 4, \",\"\}\l  .maximumRepetitionsToken: null\l  .maximumRepetitions: null\l\}\l" ]
 
   // default edges

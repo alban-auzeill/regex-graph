@@ -8,7 +8,7 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
   1[ label="SequenceTree:1\{\l  .range: \{0, 5, \"(?i)a\"\}\l\}\l" ]
   3[ label="NonCapturingGroupTree:3\{\l  .range: \{0, 4, \"(?i)\"\}\l  .activeFlags: 2\l  .kind: NON_CAPTURING_GROUP\l  .element: null\l  .groupHeader: null\l  .enabledFlags: 2\l\}\l" ]
-  4[ label="PlainCharacterTree:4\{\l  .range: \{4, 5, \"a\"\}\l  .activeFlags: 2\l  .contents: \{'a'\}\l\}\l" ]
+  4[ label="CharacterTree:4\{\l  .range: \{4, 5, \"a\"\}\l  .activeFlags: 2\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
 
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]

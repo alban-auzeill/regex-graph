@@ -15,11 +15,11 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   5[ label="SimpleQuantifier:5\{\l  .range: \{3, 5, \"*+\"\}\l  .modifier: POSSESSIVE\l  .kind: STAR\l\}\l" ]
   7[ label="CharacterClassUnionTree:7\{\l  .range: \{6, 11, \"02468\"\}\l\}\l" ]
-  9[ label="PlainCharacterTree:9\{\l  .range: \{6, 7, \"0\"\}\l  .contents: \{'0'\}\l\}\l" ]
-  10[ label="PlainCharacterTree:10\{\l  .range: \{7, 8, \"2\"\}\l  .contents: \{'2'\}\l\}\l" ]
-  11[ label="PlainCharacterTree:11\{\l  .range: \{8, 9, \"4\"\}\l  .contents: \{'4'\}\l\}\l" ]
-  12[ label="PlainCharacterTree:12\{\l  .range: \{9, 10, \"6\"\}\l  .contents: \{'6'\}\l\}\l" ]
-  13[ label="PlainCharacterTree:13\{\l  .range: \{10, 11, \"8\"\}\l  .contents: \{'8'\}\l\}\l" ]
+  9[ label="CharacterTree:9\{\l  .range: \{6, 7, \"0\"\}\l  .codePoint: 48\l  .isEscapeSequence: false\l\}\l" ]
+  10[ label="CharacterTree:10\{\l  .range: \{7, 8, \"2\"\}\l  .codePoint: 50\l  .isEscapeSequence: false\l\}\l" ]
+  11[ label="CharacterTree:11\{\l  .range: \{8, 9, \"4\"\}\l  .codePoint: 52\l  .isEscapeSequence: false\l\}\l" ]
+  12[ label="CharacterTree:12\{\l  .range: \{9, 10, \"6\"\}\l  .codePoint: 54\l  .isEscapeSequence: false\l\}\l" ]
+  13[ label="CharacterTree:13\{\l  .range: \{10, 11, \"8\"\}\l  .codePoint: 56\l  .isEscapeSequence: false\l\}\l" ]
 
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
@@ -28,6 +28,10 @@ digraph G {
   // end nodes
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
   EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
+
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  14[ label="EndOfRepetitionState:14\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]
@@ -46,6 +50,7 @@ digraph G {
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
   1 -> 3 [ label="",  taillabel="" ]
+  3 -> 14 [ label="",  taillabel="2" ]
   4 -> 3 [ label="",  taillabel="" ]
   6 -> EndOfRegex [ label="",  taillabel="" ]
 
@@ -53,12 +58,17 @@ digraph G {
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
   1 -> EndOfRegex [ label="",  taillabel="" ]
-  3 -> 6 [ label="",  taillabel="" ]
+  3 -> 14 [ label="",  taillabel="" ]
   4 -> 3 [ label="",  taillabel="" ]
+  14 -> 6 [ label="",  taillabel="" ]
   6 -> EndOfRegex [ label="",  taillabel="" ]
 
   // character-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
   3 -> 4 [ label="",  taillabel="1" ]
-  3 -> 6 [ label="",  taillabel="2" ]
+  14 -> 6 [ label="",  taillabel="" ]
+
+  // reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  14 -> 3 [ label="",  taillabel="parent" ]
 }

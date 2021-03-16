@@ -7,7 +7,7 @@ digraph G {
   // default nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   1[ label="LookAroundTree:1\{\l  .range: \{0, 5, \"(?!b)\"\}\l  .kind: LOOK_AROUND\l  .groupHeader: \{0, 3, \"(?!\"\}\l  .polarity: NEGATIVE\l  .direction: AHEAD\l\}\l" ]
-  2[ label="PlainCharacterTree:2\{\l  .range: \{3, 4, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+  2[ label="CharacterTree:2\{\l  .range: \{3, 4, \"b\"\}\l  .codePoint: 98\l  .isEscapeSequence: false\l\}\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]

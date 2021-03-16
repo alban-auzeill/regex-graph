@@ -7,10 +7,10 @@ digraph G {
   // tree-and-state nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="Blue", fillcolor="Beige", fixedsize="false", width="0.75"]
   1[ label="SequenceTree:1\{\l  .range: \{0, 4, \"ab*c\"\}\l\}\l" ]
-  3[ label="PlainCharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  3[ label="CharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
   4[ label="RepetitionTree:4\{\l  .range: \{1, 3, \"b*\"\}\l\}\l" ]
-  5[ label="PlainCharacterTree:5\{\l  .range: \{1, 2, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
-  7[ label="PlainCharacterTree:7\{\l  .range: \{3, 4, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+  5[ label="CharacterTree:5\{\l  .range: \{1, 2, \"b\"\}\l  .codePoint: 98\l  .isEscapeSequence: false\l\}\l" ]
+  7[ label="CharacterTree:7\{\l  .range: \{3, 4, \"c\"\}\l  .codePoint: 99\l  .isEscapeSequence: false\l\}\l" ]
 
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
@@ -20,10 +20,15 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
   EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  8[ label="EndOfRepetitionState:8\l" ]
+
   // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
   3 -> 4 [ label="",  taillabel="" ]
+  4 -> 8 [ label="",  taillabel="2" ]
   5 -> 4 [ label="",  taillabel="" ]
   7 -> EndOfRegex [ label="",  taillabel="" ]
 
@@ -32,13 +37,18 @@ digraph G {
   StartState -> 1 [ label="",  taillabel="" ]
   1 -> EndOfRegex [ label="",  taillabel="" ]
   3 -> 4 [ label="",  taillabel="" ]
-  4 -> 7 [ label="",  taillabel="" ]
+  4 -> 8 [ label="",  taillabel="" ]
   5 -> 4 [ label="",  taillabel="" ]
+  8 -> 7 [ label="",  taillabel="" ]
   7 -> EndOfRegex [ label="",  taillabel="" ]
 
   // character-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
   1 -> 3 [ label="",  taillabel="" ]
   4 -> 5 [ label="",  taillabel="1" ]
-  4 -> 7 [ label="",  taillabel="2" ]
+  8 -> 7 [ label="",  taillabel="" ]
+
+  // reference edges
+  edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
+  8 -> 4 [ label="",  taillabel="parent" ]
 }

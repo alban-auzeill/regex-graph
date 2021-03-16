@@ -12,11 +12,11 @@ digraph G {
   5[ label="SimpleQuantifier:5\{\l  .range: \{3, 5, \"*+\"\}\l  .modifier: POSSESSIVE\l  .kind: STAR\l\}\l" ]
   6[ label="CharacterClassTree:6\{\l  .range: \{5, 12, \"[02468]\"\}\l  .openingBracket: \{'['\}\l  .negated: false\l\}\l" ]
   7[ label="CharacterClassUnionTree:7\{\l  .range: \{6, 11, \"02468\"\}\l\}\l" ]
-  9[ label="PlainCharacterTree:9\{\l  .range: \{6, 7, \"0\"\}\l  .contents: \{'0'\}\l\}\l" ]
-  10[ label="PlainCharacterTree:10\{\l  .range: \{7, 8, \"2\"\}\l  .contents: \{'2'\}\l\}\l" ]
-  11[ label="PlainCharacterTree:11\{\l  .range: \{8, 9, \"4\"\}\l  .contents: \{'4'\}\l\}\l" ]
-  12[ label="PlainCharacterTree:12\{\l  .range: \{9, 10, \"6\"\}\l  .contents: \{'6'\}\l\}\l" ]
-  13[ label="PlainCharacterTree:13\{\l  .range: \{10, 11, \"8\"\}\l  .contents: \{'8'\}\l\}\l" ]
+  9[ label="CharacterTree:9\{\l  .range: \{6, 7, \"0\"\}\l  .codePoint: 48\l  .isEscapeSequence: false\l\}\l" ]
+  10[ label="CharacterTree:10\{\l  .range: \{7, 8, \"2\"\}\l  .codePoint: 50\l  .isEscapeSequence: false\l\}\l" ]
+  11[ label="CharacterTree:11\{\l  .range: \{8, 9, \"4\"\}\l  .codePoint: 52\l  .isEscapeSequence: false\l\}\l" ]
+  12[ label="CharacterTree:12\{\l  .range: \{9, 10, \"6\"\}\l  .codePoint: 54\l  .isEscapeSequence: false\l\}\l" ]
+  13[ label="CharacterTree:13\{\l  .range: \{10, 11, \"8\"\}\l  .codePoint: 56\l  .isEscapeSequence: false\l\}\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]

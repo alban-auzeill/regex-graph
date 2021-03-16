@@ -13,27 +13,30 @@ digraph G {
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
   StartState[ label="StartState\l\l\l\l" ]
 
+  // state nodes
+  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
+  4[ label="EndOfRepetitionState:4\l" ]
+  5[ label="Branch:5\l" ]
+
   // end nodes
   node [fontname="Monospace", fontsize= "9", shape="doublecircle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.12"]
   EndOfRegex[ label="EndOfRegex\l\l\l\l" ]
 
-  // state nodes
-  node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="DodgerBlue", fillcolor="LightSkyBlue", fixedsize="false", width="0.75"]
-  4[ label="Branch:4\l" ]
-
   // epsilon-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
-  2 -> 4 [ label="",  taillabel="" ]
-  4 -> 1 [ label="",  taillabel="1" ]
-  4 -> EndOfRegex [ label="",  taillabel="2" ]
+  2 -> 5 [ label="",  taillabel="" ]
+  4 -> EndOfRegex [ label="",  taillabel="" ]
+  5 -> 1 [ label="",  taillabel="1" ]
+  5 -> 4 [ label="",  taillabel="2" ]
 
   // continuation edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="vee", arrowtail="none", dir="both"]
   StartState -> 1 [ label="",  taillabel="" ]
-  1 -> EndOfRegex [ label="",  taillabel="" ]
-  2 -> 4 [ label="",  taillabel="" ]
+  1 -> 4 [ label="",  taillabel="" ]
+  2 -> 5 [ label="",  taillabel="" ]
   4 -> EndOfRegex [ label="",  taillabel="" ]
+  5 -> 4 [ label="",  taillabel="" ]
 
   // character-successor edges
   edge [fontname="Monospace", fontsize="9", style="bold", color="DodgerBlue", fontcolor="MediumBlue", arrowhead="dotvee", arrowtail="none", dir="both"]
@@ -42,4 +45,5 @@ digraph G {
   // reference edges
   edge [fontname="Monospace", fontsize="9", style="dashed", color="Red", fontcolor="Firebrick", arrowhead="vee", arrowtail="none", dir="both"]
   4 -> 1 [ label="",  taillabel="parent" ]
+  5 -> 1 [ label="",  taillabel="parent" ]
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.sonar.java.model.InternalSyntaxToken;
 import org.sonar.java.model.expression.LiteralTreeImpl;
+import org.sonar.java.regex.JavaRegexSource;
 import org.sonar.java.regex.RegexParseResult;
 import org.sonar.java.regex.RegexParser;
 import org.sonar.java.regex.SyntaxError;
@@ -22,16 +23,18 @@ import org.sonar.java.regex.ast.BranchState;
 import org.sonar.java.regex.ast.CapturingGroupTree;
 import org.sonar.java.regex.ast.EndOfCapturingGroupState;
 import org.sonar.java.regex.ast.EndOfLookaroundState;
+import org.sonar.java.regex.ast.EndOfRepetitionState;
 import org.sonar.java.regex.ast.FinalState;
 import org.sonar.java.regex.ast.FlagSet;
 import org.sonar.java.regex.ast.IndexRange;
-import org.sonar.java.regex.ast.JavaCharacter;
 import org.sonar.java.regex.ast.LookAroundTree;
 import org.sonar.java.regex.ast.NegationState;
-import org.sonar.java.regex.ast.RegexSource;
+import org.sonar.java.regex.RegexSource;
 import org.sonar.java.regex.ast.RegexSyntaxElement;
 import org.sonar.java.regex.ast.RegexToken;
 import org.sonar.java.regex.ast.RegexTree;
+import org.sonar.java.regex.ast.RepetitionTree;
+import org.sonar.java.regex.ast.SourceCharacter;
 import org.sonar.java.regex.ast.StartOfLookBehindState;
 import org.sonar.java.regex.ast.StartState;
 import org.sonar.plugins.java.api.tree.LiteralTree;
@@ -56,7 +59,7 @@ public class RegexTreeGraph extends GraphWriter {
     if (!onlyLegend) {
       InternalSyntaxToken token = new InternalSyntaxToken(1, 1, stringLiteral, Collections.emptyList(), false);
       LiteralTree literalTree = new LiteralTreeImpl(Kind.STRING_LITERAL, token);
-      RegexSource source = new RegexSource(Collections.singletonList(literalTree));
+      RegexSource source = new JavaRegexSource(Collections.singletonList(literalTree));
       RegexParser parser = new RegexParser(source, new FlagSet());
       result = parser.parse();
     }
@@ -298,6 +301,9 @@ public class RegexTreeGraph extends GraphWriter {
     } else if (state instanceof EndOfCapturingGroupState) {
       reference = createNewNodeReference(state);
       label = "EndOfCapturingGroup:" + reference;
+    } else if (state instanceof EndOfRepetitionState) {
+      reference = createNewNodeReference(state);
+      label = "EndOfRepetitionState:" + reference;
     } else if (state instanceof NegationState) {
       reference = createNewNodeReference(state);
       label = "Negation:" + reference;
@@ -338,6 +344,8 @@ public class RegexTreeGraph extends GraphWriter {
       createEdge(state, getParent((EndOfLookaroundState) state), "parent", "reference");
     } else if (state instanceof EndOfCapturingGroupState) {
       createEdge(state, ((EndOfCapturingGroupState) state).group(), "group", "reference");
+    } else if (state instanceof EndOfRepetitionState) {
+      createEdge(state, getParent((EndOfRepetitionState) state), "parent", "reference");
     } else if (state instanceof BackReferenceTree) {
       findMatchingGroup((BackReferenceTree) state, allStates)
         .ifPresent(capturingGroup -> createEdge(state, capturingGroup, "reference", "reference"));
@@ -396,6 +404,18 @@ public class RegexTreeGraph extends GraphWriter {
     }
   }
 
+  private static RepetitionTree getParent(EndOfRepetitionState state) {
+    try {
+      Field field = EndOfRepetitionState.class.getDeclaredField("parent");
+      if (!field.canAccess(state)) {
+        field.setAccessible(true);
+      }
+      return (RepetitionTree) field.get(state);
+    } catch (IllegalAccessException | NoSuchFieldException e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
   // TODO fix this
   private static RegexTree getParent(BranchState state) {
     try {
@@ -441,8 +461,8 @@ public class RegexTreeGraph extends GraphWriter {
     } else if (value.getClass().equals(FlagSet.class)) {
       int mask = ((FlagSet) value).getMask();
       return mask == 0 ? null : new DirectValue(Integer.toString(mask));
-    } else if (value.getClass().equals(JavaCharacter.class)) {
-      JavaCharacter javaCharacter = (JavaCharacter) value;
+    } else if (value.getClass().equals(SourceCharacter.class)) {
+      SourceCharacter javaCharacter = (SourceCharacter) value;
       String escape = javaCharacter.isEscapeSequence() ? ", isEscapeSequence=true" : "";
       return new DirectValue("{'" + escapeJavaString(String.valueOf(javaCharacter.getCharacter()), true) + "'" + escape + "}");
     } else if (value.getClass().equals(RegexToken.class)) {

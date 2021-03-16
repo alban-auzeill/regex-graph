@@ -10,7 +10,7 @@ digraph G {
   3[ label="RepetitionTree:3\{\l  .range: \{0, 2, \".*\"\}\l\}\l" ]
   4[ label="DotTree:4\{\l  .range: \{0, 1, \".\"\}\l\}\l" ]
   5[ label="SimpleQuantifier:5\{\l  .range: \{1, 2, \"*\"\}\l  .modifier: GREEDY\l  .kind: STAR\l\}\l" ]
-  6[ label="PlainCharacterTree:6\{\l  .range: \{2, 3, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  6[ label="CharacterTree:6\{\l  .range: \{2, 3, \"a\"\}\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]

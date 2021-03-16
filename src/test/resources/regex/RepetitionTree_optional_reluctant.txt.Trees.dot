@@ -7,11 +7,11 @@ digraph G {
   // default nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   1[ label="SequenceTree:1\{\l  .range: \{0, 5, \"ab??c\"\}\l\}\l" ]
-  3[ label="PlainCharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  3[ label="CharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
   4[ label="RepetitionTree:4\{\l  .range: \{1, 4, \"b??\"\}\l\}\l" ]
-  5[ label="PlainCharacterTree:5\{\l  .range: \{1, 2, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+  5[ label="CharacterTree:5\{\l  .range: \{1, 2, \"b\"\}\l  .codePoint: 98\l  .isEscapeSequence: false\l\}\l" ]
   6[ label="SimpleQuantifier:6\{\l  .range: \{2, 4, \"??\"\}\l  .modifier: RELUCTANT\l  .kind: QUESTION_MARK\l\}\l" ]
-  7[ label="PlainCharacterTree:7\{\l  .range: \{4, 5, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+  7[ label="CharacterTree:7\{\l  .range: \{4, 5, \"c\"\}\l  .codePoint: 99\l  .isEscapeSequence: false\l\}\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]

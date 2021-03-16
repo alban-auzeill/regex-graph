@@ -10,10 +10,10 @@ digraph G {
   3[ label="RepetitionTree:3\{\l  .range: \{0, 8, \"(a|b)\{7\}\"\}\l\}\l" ]
   4[ label="CapturingGroupTree:4\{\l  .range: \{0, 5, \"(a|b)\"\}\l  .kind: CAPTURING_GROUP\l  .groupHeader: \{0, 1, \"(\"\}\l  .name: null\l  .groupNumber: 1\l\}\l" ]
   5[ label="DisjunctionTree:5\{\l  .range: \{1, 4, \"a|b\"\}\l  .orOperators: :9[ \{'|'\} ]\l\}\l" ]
-  7[ label="PlainCharacterTree:7\{\l  .range: \{1, 2, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
-  8[ label="PlainCharacterTree:8\{\l  .range: \{3, 4, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
+  7[ label="CharacterTree:7\{\l  .range: \{1, 2, \"a\"\}\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
+  8[ label="CharacterTree:8\{\l  .range: \{3, 4, \"b\"\}\l  .codePoint: 98\l  .isEscapeSequence: false\l\}\l" ]
   10[ label="CurlyBraceQuantifier:10\{\l  .range: \{5, 8, \"\{7\}\"\}\l  .modifier: GREEDY\l  .minimumRepetitionsToken: \{6, 7, \"7\"\}\l  .minimumRepetitions: 7\l  .commaToken: null\l  .maximumRepetitionsToken: null\l  .maximumRepetitions: null\l\}\l" ]
-  11[ label="PlainCharacterTree:11\{\l  .range: \{8, 9, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+  11[ label="CharacterTree:11\{\l  .range: \{8, 9, \"c\"\}\l  .codePoint: 99\l  .isEscapeSequence: false\l\}\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]

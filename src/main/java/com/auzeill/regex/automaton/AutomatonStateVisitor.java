@@ -23,13 +23,11 @@ import org.sonar.java.regex.ast.LookAroundTree;
 import org.sonar.java.regex.ast.LookAroundTree.Polarity;
 import org.sonar.java.regex.ast.MiscEscapeSequenceTree;
 import org.sonar.java.regex.ast.NonCapturingGroupTree;
-import org.sonar.java.regex.ast.PlainCharacterTree;
 import org.sonar.java.regex.ast.Quantifier;
 import org.sonar.java.regex.ast.RegexBaseVisitor;
 import org.sonar.java.regex.ast.RegexSyntaxElement;
 import org.sonar.java.regex.ast.RepetitionTree;
 import org.sonar.java.regex.ast.SequenceTree;
-import org.sonar.java.regex.ast.UnicodeCodePointTree;
 
 import static org.sonar.java.regex.ast.LookAroundTree.Direction.AHEAD;
 import static org.sonar.java.regex.ast.LookAroundTree.Direction.BEHIND;
@@ -246,16 +244,6 @@ public class AutomatonStateVisitor extends RegexBaseVisitor {
 
   @Override
   public void visitCharacterClass(CharacterClassTree tree) {
-    createState(StateType.CHARACTER, tree);
-  }
-
-  @Override
-  public void visitPlainCharacter(PlainCharacterTree tree) {
-    createState(StateType.CHARACTER, tree);
-  }
-
-  @Override
-  public void visitUnicodeCodePoint(UnicodeCodePointTree tree) {
     createState(StateType.CHARACTER, tree);
   }
 

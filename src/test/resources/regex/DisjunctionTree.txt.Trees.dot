@@ -7,10 +7,10 @@ digraph G {
   // default nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   1[ label="DisjunctionTree:1\{\l  .range: \{0, 4, \"a|bc\"\}\l  .orOperators: :8[ \{'|'\} ]\l\}\l" ]
-  3[ label="PlainCharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
+  3[ label="CharacterTree:3\{\l  .range: \{0, 1, \"a\"\}\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
   4[ label="SequenceTree:4\{\l  .range: \{2, 4, \"bc\"\}\l\}\l" ]
-  6[ label="PlainCharacterTree:6\{\l  .range: \{2, 3, \"b\"\}\l  .contents: \{'b'\}\l\}\l" ]
-  7[ label="PlainCharacterTree:7\{\l  .range: \{3, 4, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+  6[ label="CharacterTree:6\{\l  .range: \{2, 3, \"b\"\}\l  .codePoint: 98\l  .isEscapeSequence: false\l\}\l" ]
+  7[ label="CharacterTree:7\{\l  .range: \{3, 4, \"c\"\}\l  .codePoint: 99\l  .isEscapeSequence: false\l\}\l" ]
 
   // default edges
   edge [fontname="Monospace", fontsize="9", style="solid", color="SlateGray", fontcolor="DarkSlateGray", arrowhead="vee", arrowtail="none", dir="both"]

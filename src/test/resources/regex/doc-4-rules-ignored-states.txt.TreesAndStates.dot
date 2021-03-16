@@ -11,8 +11,8 @@ digraph G {
   // default nodes
   node [fontname="Monospace", fontsize= "9", shape="box", style="rounded,filled", color="LightGray", fillcolor="Beige", fixedsize="false", width="0.75"]
   2[ label="CharacterRangeTree:2\{\l  .range: \{1, 4, \"a-c\"\}\l\}\l" ]
-  3[ label="PlainCharacterTree:3\{\l  .range: \{1, 2, \"a\"\}\l  .contents: \{'a'\}\l\}\l" ]
-  4[ label="PlainCharacterTree:4\{\l  .range: \{3, 4, \"c\"\}\l  .contents: \{'c'\}\l\}\l" ]
+  3[ label="CharacterTree:3\{\l  .range: \{1, 2, \"a\"\}\l  .codePoint: 97\l  .isEscapeSequence: false\l\}\l" ]
+  4[ label="CharacterTree:4\{\l  .range: \{3, 4, \"c\"\}\l  .codePoint: 99\l  .isEscapeSequence: false\l\}\l" ]
 
   // start nodes
   node [fontname="Monospace", fontsize= "9", shape="circle", style="rounded,filled", color="#7070E0", fillcolor="#7070E0", fixedsize="true", width="0.20"]
