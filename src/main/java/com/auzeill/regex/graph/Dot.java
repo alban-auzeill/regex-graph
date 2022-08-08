@@ -42,6 +42,8 @@ public class Dot {
         return "/usr/bin/dot";
       } else if (Files.exists(Paths.get("/usr/local/bin/dot"))) {
         return "/usr/local/bin/dot";
+      } else if (Files.exists(Paths.get("/opt/homebrew/bin/dot"))) {
+        return "/opt/homebrew/bin/dot";
       }
     }
     throw new IOException("Missing Graphviz dot in /usr/bin/dot, install 'graphviz' or define GRAPHVIZ_DOT environment variable.");

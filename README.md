@@ -8,6 +8,10 @@ Convert a java regular expression pattern into a graph.
 ```sh
 $ sudo apt install graphviz
 ```
+OR
+```sh
+$ brew install graphviz
+```
 
 ## Build
 ```sh
